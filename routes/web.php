@@ -26,8 +26,10 @@ Route::get('/dashboard', function () {
     return view('dashboard', compact('user'));
 })->name('dashboard');
 
-Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/principal/dashboard', [App\Http\Controllers\RoleDashboardController::class, 'principal'])->name('principal.dashboard');
+Route::get('/homeroom/dashboard', [App\Http\Controllers\RoleDashboardController::class, 'homeroom'])->name('homeroom.dashboard');
+Route::get('/teacher/dashboard', [App\Http\Controllers\RoleDashboardController::class, 'teacher'])->name('teacher.dashboard');
 
 Route::prefix('students')->group(function () {
     Route::get('/', [StudentController::class, 'index'])->name('students.index');
@@ -80,4 +82,146 @@ Route::get('/check-siap-cols', function () {
     } catch (\Exception $e) {
         return $e->getMessage();
     }
+});
+
+// Dashboard Routes (Dummy Data Oriented)
+Route::prefix('admin')->group(function () {
+    Route::get('/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
+
+    Route::get('/competency-mapping', function () {
+        return view('admin.competency_mapping');
+    });
+
+    Route::get('/registered-students', function () {
+        return view('admin.registered_students');
+    });
+
+    Route::get('/active-quizzes', [App\Http\Controllers\Admin\QuizAllocatorController::class, 'index'])->name('admin.active_quizzes');
+    Route::post('/active-quizzes/store', [App\Http\Controllers\Admin\QuizAllocatorController::class, 'store'])->name('admin.quiz_allocate');
+    Route::put('/active-quizzes/{id}', [App\Http\Controllers\Admin\QuizAllocatorController::class, 'update'])->name('admin.quiz_allocate_update');
+    Route::delete('/active-quizzes/{id}', [App\Http\Controllers\Admin\QuizAllocatorController::class, 'destroy'])->name('admin.quiz_deallocate');
+
+    Route::get('/competency-architect', [App\Http\Controllers\Admin\CompetencyArchitectController::class, 'index'])->name('admin.competency_architect');
+    Route::get('/competency-list', [App\Http\Controllers\Admin\CompetencyArchitectController::class, 'competencyList'])->name('admin.competency_list');
+    Route::post('/competency-architect/auto-map', [App\Http\Controllers\Admin\CompetencyArchitectController::class, 'runAutoMapping'])->name('admin.competency_auto_map');
+    Route::post('/competency-architect/update-kkm', [App\Http\Controllers\Admin\CompetencyArchitectController::class, 'updateKkm'])->name('admin.update_kkm');
+    Route::post('/competency-architect/store', [App\Http\Controllers\Admin\CompetencyArchitectController::class, 'storeCompetency'])->name('admin.competency_store');
+    Route::post('/competency-architect/update/{id}', [App\Http\Controllers\Admin\CompetencyArchitectController::class, 'updateCompetency'])->name('admin.competency_update');
+    Route::post('/competency-architect/delete/{id}', [App\Http\Controllers\Admin\CompetencyArchitectController::class, 'deleteCompetency'])->name('admin.competency_delete');
+
+    // School Management
+    Route::get('/school-setup', [App\Http\Controllers\Admin\CompetencyArchitectController::class, 'schoolSetup'])->name('admin.school_setup');
+    Route::post('/school-setup', [App\Http\Controllers\Admin\CompetencyArchitectController::class, 'storeSchool'])->name('admin.school_store');
+    Route::post('/school-update/{id}', [App\Http\Controllers\Admin\CompetencyArchitectController::class, 'updateSchool'])->name('admin.school_update');
+    Route::post('/school-delete/{id}', [App\Http\Controllers\Admin\CompetencyArchitectController::class, 'deleteSchool'])->name('admin.school_delete');
+
+    // Role & User Management
+    Route::get('/role-assignment', [App\Http\Controllers\Admin\CompetencyArchitectController::class, 'roleAssignment'])->name('admin.role_assignment');
+    Route::post('/role-assignment', [App\Http\Controllers\Admin\CompetencyArchitectController::class, 'storeRoleAssignment'])->name('admin.role_store');
+
+    Route::get('/smart-importer', [App\Http\Controllers\Admin\SmartImporterController::class, 'index'])->name('admin.smart_importer');
+    Route::post('/smart-importer/preview', [App\Http\Controllers\Admin\SmartImporterController::class, 'preview'])->name('admin.smart_importer.preview');
+    Route::post('/smart-importer/process', [App\Http\Controllers\Admin\SmartImporterController::class, 'process'])->name('admin.smart_importer.process');
+
+    Route::get('/org-manager', [App\Http\Controllers\Admin\CompetencyArchitectController::class, 'orgManager'])->name('admin.org_manager');
+    Route::get('/org-detail/{id}/students', [App\Http\Controllers\Admin\CompetencyArchitectController::class, 'schoolStudentList'])->name('admin.school_student_list');
+    Route::post('/student-update/{id}', [App\Http\Controllers\Admin\CompetencyArchitectController::class, 'updateStudent'])->name('admin.student_update');
+    Route::post('/student-delete/{id}', [App\Http\Controllers\Admin\CompetencyArchitectController::class, 'deleteStudent'])->name('admin.student_delete');
+    Route::post('/student-store', [App\Http\Controllers\Admin\CompetencyArchitectController::class, 'storeStudent'])->name('admin.student_store');
+
+    Route::get('/debug-admins', function() {
+        $adminIds = DB::connection('moodle')->table('config')->where('name', 'siteadmins')->value('value');
+        $users = DB::connection('moodle')->table('user')->whereIn('id', explode(',', $adminIds))->get();
+        return $users;
+    });
+
+    Route::get('/org-detail/{id}', [App\Http\Controllers\Admin\CompetencyArchitectController::class, 'orgDetail'])->name('admin.org_detail');
+    Route::get('/org-detail/{id}/classes', [App\Http\Controllers\Admin\CompetencyArchitectController::class, 'classList'])->name('admin.class_list');
+    Route::get('/org-detail/{id}/users', [App\Http\Controllers\Admin\CompetencyArchitectController::class, 'schoolUserList'])->name('admin.school_user_list');
+    
+    // School-Course Mapping
+    Route::post('/org-detail/{id}/link-course', [App\Http\Controllers\Admin\CompetencyArchitectController::class, 'linkCourseStore'])->name('admin.link_course_store');
+    Route::post('/org-detail/{id}/unlink-course/{courseId}', [App\Http\Controllers\Admin\CompetencyArchitectController::class, 'linkCourseDelete'])->name('admin.link_course_delete');
+    
+    // User Management within Org
+    Route::post('/user-store', [App\Http\Controllers\Admin\CompetencyArchitectController::class, 'storeUser'])->name('admin.user_store');
+    Route::post('/user-update/{id}', [App\Http\Controllers\Admin\CompetencyArchitectController::class, 'updateUser'])->name('admin.user_update');
+    Route::post('/user-delete/{id}', [App\Http\Controllers\Admin\CompetencyArchitectController::class, 'deleteUser'])->name('admin.user_delete');
+
+    // Class Management
+    Route::post('/class-store', [App\Http\Controllers\Admin\CompetencyArchitectController::class, 'storeClass'])->name('admin.class_store');
+    Route::post('/class-update/{id}', [App\Http\Controllers\Admin\CompetencyArchitectController::class, 'updateClass'])->name('admin.class_update');
+    Route::post('/class-delete/{id}', [App\Http\Controllers\Admin\CompetencyArchitectController::class, 'deleteClass'])->name('admin.class_delete');
+
+    Route::get('/gamification-manager', function () {
+        return view('admin.gamification_manager');
+    });
+});
+
+Route::prefix('principal')->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\Principal\PrincipalDashboardController::class, 'index'])->name('principal.dashboard');
+
+    Route::get('/absent-students', function () {
+        return view('principal.absent_students');
+    });
+
+    Route::get('/intervention-students', function () {
+        return view('principal.intervention_students');
+    });
+
+    Route::get('/top-performing-students', function () {
+        return view('principal.top_performing_students');
+    });
+});
+
+Route::prefix('teacher')->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\Teacher\TeacherDashboardController::class, 'index'])->name('teacher.dashboard');
+
+    Route::get('/low-performing-topics', function () {
+        return view('teacher.low_performing_topics');
+    });
+});
+
+Route::prefix('homeroom')->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\Homeroom\HomeroomDashboardController::class, 'index'])->name('homeroom.dashboard');
+
+    Route::get('/class-health-details', function () {
+        return view('homeroom.class_health_details');
+    });
+
+    Route::get('/absent-students', function () {
+        return view('homeroom.absent_students');
+    });
+
+    Route::get('/intervention-students', function () {
+        return view('homeroom.intervention_students');
+    });
+
+    Route::get('/top-performing-students', function () {
+        return view('homeroom.top_performing_students');
+    });
+});
+
+Route::prefix('student')->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\Student\StudentDashboardController::class, 'index'])->name('student.dashboard');
+
+    Route::get('/growth-details', function () {
+        return view('student.growth_details');
+    });
+
+    Route::get('/excellent-scores', [App\Http\Controllers\Student\StudentDashboardController::class, 'excellentScores'])->name('student.excellent_scores');
+
+    Route::get('/alert-scores', function () {
+        return view('student.alert_scores');
+    });
+
+    Route::get('/topic-alerts', function () {
+        return view('student.topic_alerts');
+    });
+
+    Route::get('/verify-identity', function () {
+        return view('student.verify_identity');
+    });
 });
