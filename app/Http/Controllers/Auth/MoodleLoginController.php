@@ -27,16 +27,45 @@ class MoodleLoginController extends Controller
         $user = MoodleUser::where('username', $request->username)->first();
 
         if ($user && MoodlePasswordHelper::verifyMoodlePassword($request->password, $user->password)) {
+            $role = 'student'; // Default
+            
+            // 1. Cek Super Admin (Deteksi otomatis dari konfigurasi Moodle 'siteadmins')
+            $moodleAdminsConfig = \Illuminate\Support\Facades\DB::connection('moodle')->table('config')->where('name', 'siteadmins')->value('value');
+            $moodleAdminIds = explode(',', $moodleAdminsConfig);
+            
+            if (in_array($user->id, $moodleAdminIds)) {
+                $role = 'admin';
+            } 
+            // 2. Cek Kepala Sekolah
+            elseif (\Illuminate\Support\Facades\DB::table('ai_schools')->where('principal_name', $user->id)->exists()) {
+                $role = 'principal';
+            }
+            // 3. Cek Wali Kelas
+            elseif (\Illuminate\Support\Facades\DB::table('ai_classes')->where('homeroom_teacher_id', $user->id)->exists()) {
+                $role = 'homeroom';
+            }
+            // 4. Cek Guru Mapel
+            elseif (\Illuminate\Support\Facades\DB::table('ai_school_teachers')->where('moodle_user_id', $user->id)->exists()) {
+                $role = 'teacher';
+            }
+
             Session::put('moodle_user', [
                 'id' => $user->id,
                 'username' => $user->username,
                 'fullname' => $user->firstname . ' ' . $user->lastname,
                 'email' => $user->email,
+                'role' => $role,
             ]);
 
-            return redirect()->route('dashboard');
+            // Redireksi berdasarkan Role
+            return match($role) {
+                'admin'     => redirect()->route('admin.dashboard'),
+                'principal' => redirect()->route('principal.dashboard'),
+                'homeroom'  => redirect()->route('homeroom.dashboard'),
+                'teacher'   => redirect()->route('teacher.dashboard'),
+                default     => redirect()->route('dashboard'), // Siswa
+            };
         }
-
 
         return back()->withErrors(['login' => 'Username atau password salah.']);
     }

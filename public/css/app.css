@@ -1,0 +1,105 @@
+:root {
+    /* Palette per Guidelines */
+    --primary: #4f46e5;
+    --primary-hover: #4338ca;
+    
+    --success: #059669;
+    --warning: #d97706;
+    --danger: #e11d48;
+    
+    /* These are handled by the inline styles in layout for sync, 
+       but we keep them here for CSS-only components */
+    --radius-full: 9999px;
+    --radius-lg: 1.5rem;
+    --radius-xl: 2rem;
+    
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stat-group {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.modern-card {
+    background: var(--bg-card);
+    padding: 1.75rem;
+    border-radius: var(--radius-xl);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border);
+    transition: var(--transition);
+}
+
+.modern-card:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.glass {
+    backdrop-filter: blur(12px);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+}
+
+.table-wrapper {
+    background: var(--bg-card);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--border);
+    overflow: hidden;
+}
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+th {
+    text-align: left;
+    padding: 1.25rem 1.5rem;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border-bottom: 2px solid var(--border);
+    letter-spacing: 0.05em;
+    background: var(--bg-main);
+}
+
+td {
+    padding: 1.25rem 1.5rem;
+    font-size: 0.875rem;
+    color: var(--text-main);
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    vertical-align: middle;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+tr:hover td {
+    background: rgba(79, 70, 229, 0.02);
+}
+
+.progress-container {
+    background-color: var(--border);
+}
+
+.btn-indigo {
+    background: var(--primary);
+    color: white;
+    border: none;
+    box-shadow: 0 4px 14px 0 rgba(79, 70, 229, 0.3);
+}
+
+/* Badges */
+.badge-primary { background: #e0e7ff; color: #4338ca; padding: 4px 12px; border-radius: 99px; font-size: 10px; font-weight: 700; }
+.badge-success { background: #dcfce7; color: #15803d; padding: 4px 12px; border-radius: 99px; font-size: 10px; font-weight: 700; }
+.badge-warning { background: #fef3c7; color: #b45309; padding: 4px 12px; border-radius: 99px; font-size: 10px; font-weight: 700; }
+
+.dark .badge-primary { background: #312e81; color: #e0e7ff; }
+.dark .badge-success { background: #064e3b; color: #dcfce7; }
+.dark .badge-warning { background: #78350f; color: #fef3c7; }

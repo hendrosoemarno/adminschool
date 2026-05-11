@@ -6,18 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class MoodleUser extends Model
 {
+    // Menggunakan koneksi database moodle yang sudah kita definisikan di config/database.php
     protected $connection = 'moodle';
-    protected $table = 'user'; // Laravel akan otomatis tambahkan prefix mdl_
-    protected $primaryKey = 'id';
-    public $timestamps = false;
+    protected $table = 'user'; // Moodle prefix 'mdlax_' sudah otomatis ditangani oleh config
+    
+    public $timestamps = false; // Moodle menggunakan Unix timestamp, bukan format default Laravel
 
-    protected $fillable = [
-        'username', 'password', 'firstname', 'lastname', 'email'
-    ];
-
-    public function roles()
+    public function badges()
     {
-        return $this->hasMany(MoodleRoleAssignment::class, 'userid');
+        return $this->hasMany(AiUserBadge::class, 'user_id');
     }
 
+    public function performanceSnapshot()
+    {
+        return $this->hasOne(AiPerformanceSnapshot::class, 'user_id');
+    }
 }
