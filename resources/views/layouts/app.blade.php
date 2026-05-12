@@ -261,10 +261,6 @@
                         <i data-lucide="layout-dashboard" style="width:18px;height:18px;"></i>
                         <span class="t">Dashboard Kepsek</span>
                     </a>
-                    <a href="/admin/org-manager" class="s-link">
-                        <i data-lucide="bar-chart-3" style="width:18px;height:18px;"></i>
-                        <span class="t">Laporan Akademik</span>
-                    </a>
                 @endif
 
                 @if(session('moodle_user.role') === 'homeroom')
@@ -294,10 +290,6 @@
                 @if(session('moodle_user.role') === 'student')
                     <span class="nav-lbl">Siswa</span>
                     <a href="/student/dashboard" class="s-link {{ request()->is('student/dashboard') ? 'active' : '' }}">
-                        <i data-lucide="layout-dashboard" style="width:18px;height:18px;"></i>
-                        <span class="t">Dashboard Siswa</span>
-                    </a>
-                    <a href="/student/dashboard" class="s-link">
                         <i data-lucide="user" style="width:18px;height:18px;"></i>
                         <span class="t">Profil Kompetensi</span>
                     </a>

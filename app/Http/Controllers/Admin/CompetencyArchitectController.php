@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AiSchool;
+use App\Models\AiCompetency;
 use App\Models\AiKkmSetting;
 use App\Models\AiBenchmark;
 use App\Services\CompetencyMappingService;
@@ -15,13 +16,21 @@ use Illuminate\Support\Facades\Schema;
 
 class CompetencyArchitectController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $schools = AiSchool::all();
-        $regulerCompetencies = \App\Models\AiCompetencyReguler::all();
-        $deepCompetencies = \App\Models\AiCompetencyDeep::all();
+        $regulerCompetencies = AiCompetency::all();
+        $deepCompetencies = AiCompetency::where('type', 'deep_topik')->get();
         
-        // Ambil kategori soal dari Moodle untuk dropdown
+        $selectedSchoolId = $request->input('school_id', $schools->first()->id ?? 0);
+        $selectedSchool = $schools->find($selectedSchoolId);
+        
+        $subjects = AiCompetency::where('type', 'pelajaran');
+        if ($selectedSchool && $selectedSchool->jenjang) {
+            $subjects->where('jenjang', $selectedSchool->jenjang);
+        }
+        $subjects = $subjects->get();
+        
         $moodleCategories = DB::connection('moodle')->table('question_categories')
             ->select('id', 'name', 'parent')
             ->orderBy('name')
@@ -30,8 +39,8 @@ class CompetencyArchitectController extends Controller
         $mappingsData = collect();
         if (Schema::hasTable('ai_competency_mapping')) {
             $mappings = DB::table('ai_competency_mapping')
-                ->join('ai_competencies_reguler', 'ai_competencies_reguler.id', '=', 'ai_competency_mapping.competency_id')
-                ->select('ai_competency_mapping.*', 'ai_competencies_reguler.topic_name', 'ai_competencies_reguler.course_id')
+                ->join('ai_competencies', 'ai_competencies.id', '=', 'ai_competency_mapping.competency_id')
+                ->select('ai_competency_mapping.*', 'ai_competencies.topic_name', 'ai_competencies.course_id')
                 ->get();
                 
             $moodleCategoryIds = $mappings->pluck('moodle_category_id')->toArray();
@@ -48,19 +57,25 @@ class CompetencyArchitectController extends Controller
                 });
             }
         }
+
+        $kkmSettings = \App\Models\AiKkmSetting::all()->keyBy(function($item) {
+            return $item->competency_id . '_' . $item->school_id;
+        });
+        $benchmarkSettings = \App\Models\AiBenchmark::all()->keyBy(function($item) {
+            return $item->competency_id . '_' . $item->school_id;
+        });
         
-        return view('admin.competency_architect', compact('schools', 'regulerCompetencies', 'deepCompetencies', 'moodleCategories', 'mappingsData'));
+        return view('admin.competency_architect', compact('schools', 'regulerCompetencies', 'deepCompetencies', 'moodleCategories', 'mappingsData', 'kkmSettings', 'benchmarkSettings', 'subjects', 'selectedSchoolId', 'selectedSchool'));
     }
 
     public function storeCompetency(Request $request)
     {
-        $model = $request->type == 'deep' ? \App\Models\AiCompetencyDeep::class : \App\Models\AiCompetencyReguler::class;
-        
-        $model::create([
+        AiCompetency::create([
             'topic_code' => $request->topic_code,
             'topic_name' => $request->topic_name,
             'course_id' => $request->course_id ?? 1,
-            'weight' => $request->weight ?? 1.0,
+            'type' => $request->type ?? 'topik',
+            'jenjang' => $request->jenjang ?? null,
         ]);
 
         return redirect()->back()->with('success', 'Kompetensi/Mapel baru berhasil ditambahkan.');
@@ -68,17 +83,17 @@ class CompetencyArchitectController extends Controller
 
     public function competencyList()
     {
-        $reguler = \App\Models\AiCompetencyReguler::all();
-        $deep = \App\Models\AiCompetencyDeep::all();
+        $reguler = AiCompetency::where('type', 'pelajaran')->get();
+        $deep = AiCompetency::where('type', 'deep_topik')->get();
         return view('admin.competency_list', compact('reguler', 'deep'));
     }
 
     public function updateCompetency(Request $request, $id)
     {
-        $model = $request->type == 'deep' ? \App\Models\AiCompetencyDeep::class : \App\Models\AiCompetencyReguler::class;
-        $model::where('id', $id)->update([
+        AiCompetency::where('id', $id)->update([
             'topic_code' => $request->topic_code,
             'topic_name' => $request->topic_name,
+            'jenjang' => $request->jenjang ?? null,
         ]);
 
         return redirect()->back()->with('success', 'Data kompetensi berhasil diperbarui.');
@@ -86,8 +101,7 @@ class CompetencyArchitectController extends Controller
 
     public function deleteCompetency(Request $request, $id)
     {
-        $model = $request->type == 'deep' ? \App\Models\AiCompetencyDeep::class : \App\Models\AiCompetencyReguler::class;
-        $model::where('id', $id)->delete();
+        AiCompetency::where('id', $id)->delete();
         return redirect()->back()->with('success', 'Kompetensi berhasil dihapus.');
     }
 
@@ -108,8 +122,43 @@ class CompetencyArchitectController extends Controller
      */
     public function updateKkm(Request $request)
     {
-        // Logika update KKM
-        return redirect()->back()->with('success', 'KKM Sekolah berhasil diperbarui.');
+        $schoolId = $request->input('school_id', 1);
+        $kkmValues = $request->input('kkm', []);
+
+        foreach ($kkmValues as $competencyId => $minScore) {
+            $comp = AiCompetency::find($competencyId);
+            if ($comp) {
+                AiKkmSetting::updateOrCreate(
+                    ['school_id' => $schoolId, 'course_id' => $comp->course_id, 'competency_id' => $competencyId],
+                    ['min_score' => $minScore]
+                );
+            }
+        }
+        return redirect()->back()->with('success', 'KKM berhasil diperbarui.');
+    }
+
+    public function updateBenchmark(Request $request)
+    {
+        $schoolId = $request->input('school_id', 1);
+        $benchmarks = $request->input('benchmark', []);
+
+        foreach ($benchmarks as $competencyId => $values) {
+            $comp = AiCompetency::find($competencyId);
+            if ($comp) {
+                AiBenchmark::updateOrCreate(
+                    ['competency_id' => $competencyId, 'school_id' => $schoolId],
+                    [
+                        'course_id' => $comp->course_id,
+                        'target_national' => $values['nasional'] ?? 75,
+                        'target_province' => $values['provinsi'] ?? 72,
+                        'target_city' => $values['kota'] ?? 70,
+                        'target_school' => $values['sekolah'] ?? 70,
+                        'academic_year' => date('Y') . '/' . (date('Y')+1),
+                    ]
+                );
+            }
+        }
+        return redirect()->back()->with('success', 'Target benchmark berhasil diperbarui.');
     }
 
     public function schoolSetup()
@@ -123,6 +172,7 @@ class CompetencyArchitectController extends Controller
         \App\Models\AiSchool::create([
             'npsn' => $request->npsn,
             'school_name' => $request->school_name,
+            'jenjang' => $request->jenjang,
             'address' => $request->address,
         ]);
 
@@ -134,6 +184,7 @@ class CompetencyArchitectController extends Controller
         \App\Models\AiSchool::where('id', $id)->update([
             'npsn' => $request->npsn,
             'school_name' => $request->school_name,
+            'jenjang' => $request->jenjang,
             'address' => $request->address,
         ]);
         return redirect()->back()->with('success', 'Data sekolah berhasil diperbarui.');
@@ -148,7 +199,31 @@ class CompetencyArchitectController extends Controller
     public function orgManager()
     {
         $schools = \App\Models\AiSchool::all();
-        return view('admin.org_manager', compact('schools'));
+        $totalSchools = $schools->count();
+
+        // Hitung jumlah siswa per sekolah dari Moodle
+        $schoolStudentCounts = [];
+        foreach ($schools as $school) {
+            // Cari course IDs yang terhubung ke sekolah ini
+            $courseIds = DB::table('ai_school_courses')
+                ->where('school_id', $school->id)
+                ->pluck('moodle_course_id')
+                ->toArray();
+
+            if (!empty($courseIds)) {
+                $count = DB::connection('moodle')->table('user_enrolments as ue')
+                    ->join('enrol as e', 'e.id', '=', 'ue.enrolid')
+                    ->whereIn('e.courseid', $courseIds)
+                    ->distinct('ue.userid')
+                    ->count('ue.userid');
+            } else {
+                $count = 0;
+            }
+            $schoolStudentCounts[$school->id] = $count;
+        }
+        $totalStudents = array_sum($schoolStudentCounts);
+
+        return view('admin.org_manager', compact('schools', 'schoolStudentCounts', 'totalSchools', 'totalStudents'));
     }
 
     public function roleAssignment()
@@ -309,6 +384,7 @@ class CompetencyArchitectController extends Controller
     public function updateUser(Request $request, $id)
     {
         DB::connection('moodle')->table('user')->where('id', $id)->update([
+            'username' => $request->username,
             'firstname' => $request->firstname,
             'lastname' => $request->lastname,
             'email' => $request->email,
@@ -349,7 +425,7 @@ class CompetencyArchitectController extends Controller
         
         $teachers = \App\Models\MoodleUser::whereIn('id', $teacherIds)->get()->map(function($user) use ($teacherAssignments) {
             $assignment = $teacherAssignments->where('moodle_user_id', $user->id)->first();
-            $subject = \App\Models\AiCompetencyReguler::find($assignment->competency_id);
+            $subject = \App\Models\AiCompetency::find($assignment->competency_id);
             $user->assigned_subject = $subject->topic_name ?? '-';
             return $user;
         });
@@ -380,11 +456,20 @@ class CompetencyArchitectController extends Controller
 
     public function updateStudent(Request $request, $id)
     {
-        DB::connection('moodle')->table('user')->where('id', $id)->update([
+        $data = [
             'firstname' => $request->firstname,
             'lastname' => $request->lastname,
             'email' => $request->email,
-        ]);
+        ];
+
+        if ($request->filled('username')) {
+            $data['username'] = $request->username;
+        }
+        if ($request->filled('password')) {
+            $data['password'] = password_hash($request->password, PASSWORD_BCRYPT);
+        }
+
+        DB::connection('moodle')->table('user')->where('id', $id)->update($data);
 
         return redirect()->back()->with('success', 'Data siswa berhasil diperbarui.');
     }

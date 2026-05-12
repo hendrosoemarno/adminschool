@@ -63,7 +63,7 @@ class MoodleLoginController extends Controller
                 'principal' => redirect()->route('principal.dashboard'),
                 'homeroom'  => redirect()->route('homeroom.dashboard'),
                 'teacher'   => redirect()->route('teacher.dashboard'),
-                default     => redirect()->route('dashboard'), // Siswa
+                default     => redirect()->route('student.dashboard'), // Siswa
             };
         }
 

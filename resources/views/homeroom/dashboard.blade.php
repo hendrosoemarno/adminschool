@@ -7,7 +7,7 @@
 @section('content')
 <div class="modern-card" style="border-left: 4px solid var(--success);">
     <h3 class="text-slate-800 font-bold mb-2">Informasi Rombongan Belajar</h3>
-    <p class="text-slate-500">Anda adalah Wali Kelas dari: <strong>{{ $class->class_name ?? 'Kelas Tidak Terdeteksi' }}</strong></p>
+    <p class="text-slate-500">Anda adalah Wali Kelas dari: <strong>{{ $class ? $class->class_name : 'Kelas Tidak Terdeteksi' }}</strong></p>
 </div>
 
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem;">

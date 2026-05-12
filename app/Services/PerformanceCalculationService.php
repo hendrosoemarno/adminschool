@@ -17,10 +17,9 @@ class PerformanceCalculationService
         // 1. Ambil semua kategori yang sudah dipetakan untuk course ini (TERMASUK TOPIK GLOBAL DARI COURSE 1)
         // Kita gunakan DB Join agar tidak terjebak masalah relasi dinamis pada whereHas Eloquent
         $mappings = DB::table('ai_competency_mapping')
-            ->join('ai_competencies_reguler', 'ai_competencies_reguler.id', '=', 'ai_competency_mapping.competency_id')
-            ->where('ai_competency_mapping.mapping_type', 'reguler')
-            ->whereIn('ai_competencies_reguler.course_id', [$courseId, 1])
-            ->select('ai_competency_mapping.*', 'ai_competencies_reguler.topic_name')
+            ->join('ai_competencies', 'ai_competencies.id', '=', 'ai_competency_mapping.competency_id')
+            ->whereIn('ai_competencies.course_id', [$courseId, 1])
+            ->select('ai_competency_mapping.*', 'ai_competencies.topic_name', 'ai_competencies.topic_code')
             ->get();
 
         $results = [];
@@ -51,10 +50,11 @@ class PerformanceCalculationService
             $topicName = $mapping->topic_name ?? 'Topik ' . $mapping->competency_id;
             
             // Jika topik yang sama muncul dari beberapa kategori, kita akumulasikan statistik soalnya
+            $topicCode = $mapping->topic_code ?? '';
+
             if (isset($results[$topicName])) {
                 $results[$topicName]['total_questions'] += $totalQuestions;
                 $results[$topicName]['correct_answers'] += $correctAnswers;
-                // Hitung ulang persentasenya agar akurat
                 if ($results[$topicName]['total_questions'] > 0) {
                     $results[$topicName]['score'] = ($results[$topicName]['correct_answers'] / $results[$topicName]['total_questions']) * 100;
                 }
@@ -62,7 +62,8 @@ class PerformanceCalculationService
                 $results[$topicName] = [
                     'score' => $score * 100,
                     'total_questions' => $totalQuestions,
-                    'correct_answers' => $correctAnswers
+                    'correct_answers' => $correctAnswers,
+                    'topic_code' => $topicCode,
                 ];
             }
         }

@@ -46,7 +46,7 @@
                         <td class="font-bold">{{ $user->firstname }} {{ $user->lastname }}</td>
                         <td><span class="badge-indigo">KEPALA SEKOLAH</span></td>
                         <td style="text-align: center; display: flex; gap: 0.5rem; justify-content: center;">
-                            <button class="btn-indigo" style="padding: 0.4rem; background: #f1f5f9; color: #475569;" onclick="openEditModal('{{ $user->id }}', '{{ $user->firstname }}', '{{ $user->lastname }}', '{{ $user->email }}')">
+                            <button class="btn-indigo" style="padding: 0.4rem; background: #f1f5f9; color: #475569;" onclick="openEditModal('{{ $user->id }}', '{{ $user->firstname }}', '{{ $user->lastname }}', '{{ $user->email }}', '{{ $user->username }}')">
                                 <i data-lucide="edit-2" style="width: 14px;"></i>
                             </button>
                         </td>
@@ -81,7 +81,7 @@
                         <td><span class="badge-success" style="background: #f0fdf4; color: #16a34a;">WALI KELAS</span></td>
                         <td class="font-bold text-indigo-600">{{ $user->assigned_class }}</td>
                         <td style="text-align: center; display: flex; gap: 0.5rem; justify-content: center;">
-                            <button class="btn-indigo" style="padding: 0.4rem; background: #f1f5f9; color: #475569;" onclick="openEditModal('{{ $user->id }}', '{{ $user->firstname }}', '{{ $user->lastname }}', '{{ $user->email }}')">
+                            <button class="btn-indigo" style="padding: 0.4rem; background: #f1f5f9; color: #475569;" onclick="openEditModal('{{ $user->id }}', '{{ $user->firstname }}', '{{ $user->lastname }}', '{{ $user->email }}', '{{ $user->username }}')">
                                 <i data-lucide="edit-2" style="width: 14px;"></i>
                             </button>
                             <form action="{{ route('admin.user_delete', $user->id) }}" method="POST" onsubmit="return confirm('Hapus penugasan wali kelas ini?')">
@@ -122,7 +122,7 @@
                         <td><span class="badge-primary" style="background: #fdf2f8; color: #db2777;">GURU MAPEL</span></td>
                         <td class="font-bold text-amber-600">{{ $user->assigned_subject }}</td>
                         <td style="text-align: center; display: flex; gap: 0.5rem; justify-content: center;">
-                            <button class="btn-indigo" style="padding: 0.4rem; background: #f1f5f9; color: #475569;" onclick="openEditModal('{{ $user->id }}', '{{ $user->firstname }}', '{{ $user->lastname }}', '{{ $user->email }}')">
+                            <button class="btn-indigo" style="padding: 0.4rem; background: #f1f5f9; color: #475569;" onclick="openEditModal('{{ $user->id }}', '{{ $user->firstname }}', '{{ $user->lastname }}', '{{ $user->email }}', '{{ $user->username }}')">
                                 <i data-lucide="edit-2" style="width: 14px;"></i>
                             </button>
                             <form action="{{ route('admin.user_delete', $user->id) }}" method="POST" onsubmit="return confirm('Hapus penugasan guru ini?')">
@@ -206,7 +206,7 @@
             <div id="teacherFields" style="margin-bottom: 1.25rem; display: none;">
                 <label class="text-xs font-bold text-slate-500 uppercase block mb-2">Mata Pelajaran yang Diampu</label>
                 <select name="subject_id" style="width: 100%; padding: 0.75rem; border-radius: 12px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-main);">
-                    @foreach(\App\Models\AiCompetencyReguler::all() as $mapel)
+                    @foreach(\App\Models\AiCompetency::where('type', 'pelajaran')->get() as $mapel)
                         <option value="{{ $mapel->id }}">{{ $mapel->topic_name }}</option>
                     @endforeach
                 </select>
@@ -228,6 +228,10 @@
         </div>
         <form id="editUserForm" method="POST">
             @csrf
+            <div style="margin-bottom: 1.25rem;">
+                <label class="text-xs font-bold text-slate-500 uppercase block mb-2">Username</label>
+                <input type="text" name="username" id="edit_username" required style="width: 100%; padding: 0.75rem; border-radius: 12px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-main); box-sizing: border-box;">
+            </div>
             <div style="display: flex; gap: 1.5rem; margin-bottom: 1.25rem;">
                 <div style="flex: 1;">
                     <label class="text-xs font-bold text-slate-500 uppercase block mb-2">First Name</label>
@@ -248,8 +252,9 @@
 </div>
 
 <script>
-    function openEditModal(id, first, last, email) {
+    function openEditModal(id, first, last, email, username) {
         document.getElementById('editUserForm').action = '/admin/user-update/' + id;
+        document.getElementById('edit_username').value = username || '';
         document.getElementById('edit_firstname').value = first;
         document.getElementById('edit_lastname').value = last;
         document.getElementById('edit_email').value = email;

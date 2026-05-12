@@ -58,7 +58,7 @@
                     </td>
                     <td style="text-align: center; display: flex; gap: 0.5rem; justify-content: center;">
                         <button class="btn-indigo" style="padding: 0.4rem; background: #f1f5f9; color: #475569;" 
-                                onclick="openEditModal('{{ $student->id }}', '{{ $student->firstname }}', '{{ $student->lastname }}', '{{ $student->email }}')">
+                                onclick="openEditModal('{{ $student->id }}', '{{ $student->firstname }}', '{{ $student->lastname }}', '{{ $student->email }}', '{{ $student->username }}')">
                             <i data-lucide="edit-2" style="width: 16px;"></i>
                         </button>
                         <form action="{{ route('admin.student_delete', $student->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus siswa {{ $student->firstname }}?')">
@@ -93,6 +93,10 @@
         </div>
         <form id="editStudentForm" method="POST">
             @csrf
+            <div style="margin-bottom: 1.5rem;">
+                <label class="text-xs font-bold text-slate-500 uppercase block mb-2">Username (NIS)</label>
+                <input type="text" name="username" id="edit_username" required style="width: 100%; padding: 0.75rem; border-radius: 12px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-main); box-sizing: border-box;">
+            </div>
             <div style="display: flex; gap: 1.5rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
                 <div style="flex: 1; min-width: 200px;">
                     <label class="text-xs font-bold text-slate-500 uppercase block mb-2">Nama Depan</label>
@@ -103,9 +107,13 @@
                     <input type="text" name="lastname" id="edit_lastname" style="width: 100%; padding: 0.75rem; border-radius: 12px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-main); box-sizing: border-box;">
                 </div>
             </div>
-            <div style="margin-bottom: 2rem;">
+            <div style="margin-bottom: 1.5rem;">
                 <label class="text-xs font-bold text-slate-500 uppercase block mb-2">Email</label>
                 <input type="email" name="email" id="edit_email" required style="width: 100%; padding: 0.75rem; border-radius: 12px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-main); box-sizing: border-box;">
+            </div>
+            <div style="margin-bottom: 2rem;">
+                <label class="text-xs font-bold text-slate-500 uppercase block mb-2">Password <span class="text-slate-400 font-normal">(kosongkan jika tidak diubah)</span></label>
+                <input type="password" name="password" id="edit_password" placeholder="Biarkan kosong jika tidak ingin diubah" style="width: 100%; padding: 0.75rem; border-radius: 12px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-main); box-sizing: border-box;">
             </div>
             <button type="submit" class="btn-indigo" style="width: 100%; justify-content: center; padding: 1rem;">Simpan Perubahan Siswa</button>
         </form>
@@ -166,11 +174,13 @@
 </div>
 
 <script>
-    function openEditModal(id, fname, lname, email) {
+    function openEditModal(id, fname, lname, email, username) {
         document.getElementById('editStudentForm').action = '/admin/student-update/' + id;
+        document.getElementById('edit_username').value = username || '';
         document.getElementById('edit_firstname').value = fname;
         document.getElementById('edit_lastname').value = lname;
         document.getElementById('edit_email').value = email;
+        document.getElementById('edit_password').value = '';
         document.getElementById('editStudentModal').style.display = 'flex';
         lucide.createIcons();
     }

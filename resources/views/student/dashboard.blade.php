@@ -11,16 +11,46 @@
 @php
     $targetSchool = $benchmark->target_school ?? 75;
     $kkmScore = $kkm->min_score ?? 70;
-    
-    $excellentTopics = 0;
+
     $needsImprovementTopics = 0;
-    $remedialTopics = 0;
-    
+    $alertTopics = 0;
+
+    $mapelScores = [];
+    $mapelTopics = []; // mapel_code => [topik_name => score]
+
     foreach($masteryData as $topic => $data) {
         $topicScore = $data['score'];
-        if ($topicScore >= $targetSchool) $excellentTopics++;
-        if ($topicScore < $kkmScore) $needsImprovementTopics++;
-        if ($topicScore < 50) $remedialTopics++;
+        $hasData = ($data['total_questions'] ?? 0) > 0;
+        if (!$hasData) continue;
+
+        if ($topicScore < $kkmScore) $alertTopics++;
+
+        $codeParts = explode('-', $data['topic_code'] ?? '');
+        $mapelCode = $codeParts[0] ?? $topic;
+        
+        if (!isset($mapelScores[$mapelCode])) {
+            $mapelScores[$mapelCode] = ['total' => 0, 'count' => 0];
+            $mapelTopics[$mapelCode] = [];
+        }
+        $mapelScores[$mapelCode]['total'] += $topicScore;
+        $mapelScores[$mapelCode]['count']++;
+        $mapelTopics[$mapelCode][$topic] = $topicScore;
+    }
+
+    // Cari nama mapel
+    $mapelNames = [];
+    $mapelAvg = [];
+    foreach ($mapelScores as $code => $m) {
+        $mt = DB::table('ai_competencies')->where('topic_code', $code)->first();
+        $mapelNames[$code] = $mt ? $mt->topic_name : $code;
+        $mapelAvg[$code] = round($m['total'] / $m['count'], 1);
+    }
+
+    $excellentMapel = 0;
+    foreach ($mapelScores as $code => $m) {
+        $avgMapel = $m['total'] / $m['count'];
+        if ($avgMapel >= $targetSchool) $excellentMapel++;
+        if ($avgMapel < $kkmScore) $needsImprovementTopics++;
     }
 @endphp
 
@@ -28,23 +58,23 @@
     <div class="modern-card highlight-card" onclick="window.location='/student/excellent-scores'" style="cursor: pointer; border-left: 4px solid var(--success);">
         <div class="text-xs font-bold text-slate-500 uppercase mb-1">Capaian di Atas Target</div>
         <div class="text-3xl font-bold text-emerald-600">
-            {{ $excellentTopics }} <span class="text-sm font-normal text-slate-400">Topik</span>
+            {{ $excellentMapel }} <span class="text-sm font-normal text-slate-400">Mapel</span>
         </div>
-        <p class="text-xs text-slate-500 mt-2">Nilai topik di atas target sekolah ({{ $targetSchool }})</p>
+        <p class="text-xs text-slate-500 mt-2">Mata pelajaran dengan rata-rata di atas target sekolah ({{ $targetSchool }})</p>
     </div>
     <div class="modern-card highlight-card" onclick="window.location='/student/alert-scores'" style="cursor: pointer; border-left: 4px solid var(--danger);">
         <div class="text-xs font-bold text-slate-500 uppercase mb-1">Needs Improvement</div>
         <div class="text-3xl font-bold text-rose-600">
-            {{ $needsImprovementTopics }} <span class="text-sm font-normal text-slate-400">Topik</span>
+            {{ $needsImprovementTopics }} <span class="text-sm font-normal text-slate-400">Mapel</span>
         </div>
-        <p class="text-xs text-slate-500 mt-2">Topik ujian di bawah KKM ({{ $kkmScore }})</p>
+        <p class="text-xs text-slate-500 mt-2">Mata pelajaran dengan rata-rata di bawah KKM ({{ $kkmScore }})</p>
     </div>
     <div class="modern-card" onclick="window.location='/student/topic-alerts'" style="cursor: pointer; border-left: 4px solid #f59e0b;">
         <div class="text-xs font-bold text-slate-500 uppercase mb-1">Alert Topik Kritis</div>
         <div class="text-3xl font-bold text-amber-600">
-            {{ $remedialTopics }} <span class="text-sm font-normal text-slate-400">Topik</span>
+            {{ $alertTopics }} <span class="text-sm font-normal text-slate-400">Topik</span>
         </div>
-        <p class="text-xs text-slate-500 mt-2">Topik spesifik butuh perbaikan segera (Remedial)</p>
+        <p class="text-xs text-slate-500 mt-2">Topik spesifik dengan nilai di bawah KKM ({{ $kkmScore }})</p>
     </div>
 </div>
 
@@ -52,7 +82,15 @@
     <!-- Spider Radar Chart Card & Table -->
     <div style="display: flex; flex-direction: column;">
         <div class="modern-card">
-            <h3 class="text-slate-800 font-bold mb-4">Peta Kompetensi (Radar)</h3>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 class="text-slate-800 font-bold">Peta Kompetensi (Radar)</h3>
+                <select id="radarViewSelect" onchange="updateRadar()" style="padding:0.4rem 1rem;border-radius:10px;border:1px solid var(--border);background:var(--bg-card);color:var(--text-main);font-size:12px;min-width:160px;">
+                    <option value="__all">Semua Mapel</option>
+                    @foreach($mapelNames as $code => $name)
+                        <option value="{{ $code }}">{{ $name }}</option>
+                    @endforeach
+                </select>
+            </div>
             <div style="position: relative; height:300px; width:100%; display: flex; justify-content: center;">
                 <canvas id="competencyRadar"></canvas>
             </div>
@@ -156,38 +194,63 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const masteryDataRaw = {!! json_encode($masteryData) !!};
-    const labels = Object.keys(masteryDataRaw);
-    const scores = Object.values(masteryDataRaw).map(item => item.score);
+    const mapelData = {!! json_encode($mapelAvg) !!};
+    const mapelNames = {!! json_encode($mapelNames) !!};
+    const mapelTopics = {!! json_encode($mapelTopics) !!};
+    const allTopics = {!! json_encode(collect($masteryData)->mapWithKeys(function($d, $t) {
+        return [$t => round($d['score'], 1)];
+    })) !!};
 
+    let radarChart = null;
     const ctx = document.getElementById('competencyRadar');
-    new Chart(ctx, {
-        type: 'radar',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Skor Kompetensi',
-                data: scores,
-                fill: true,
-                backgroundColor: 'rgba(79, 70, 229, 0.2)',
-                borderColor: 'rgb(79, 70, 229)',
-                pointBackgroundColor: 'rgb(79, 70, 229)',
-                pointBorderColor: '#fff',
-                pointHoverBackgroundColor: '#fff',
-                pointHoverBorderColor: 'rgb(79, 70, 229)'
-            }]
-        },
-        options: {
-            elements: { line: { borderWidth: 3 } },
-            plugins: { legend: { display: false } },
-            scales: {
-                r: {
-                    angleLines: { display: true },
-                    suggestedMin: 0,
-                    suggestedMax: 100
+
+    function updateRadar() {
+        const val = document.getElementById('radarViewSelect').value;
+        let labels, scores;
+
+        if (val === '__all') {
+            // Tampilkan Mapel
+            labels = Object.keys(mapelData).map(c => mapelNames[c] || c);
+            scores = Object.values(mapelData);
+        } else {
+            // Tampilkan topik-topik dalam mapel tertentu
+            const topics = mapelTopics[val] || {};
+            labels = Object.keys(topics);
+            scores = Object.values(topics);
+        }
+
+        if (radarChart) radarChart.destroy();
+
+        radarChart = new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Skor',
+                    data: scores,
+                    fill: true,
+                    backgroundColor: 'rgba(79, 70, 229, 0.2)',
+                    borderColor: 'rgb(79, 70, 229)',
+                    pointBackgroundColor: 'rgb(79, 70, 229)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgb(79, 70, 229)'
+                }]
+            },
+            options: {
+                elements: { line: { borderWidth: 3 } },
+                plugins: { legend: { display: false } },
+                scales: {
+                    r: {
+                        angleLines: { display: true },
+                        suggestedMin: 0,
+                        suggestedMax: 100
+                    }
                 }
             }
-        }
-    });
+        });
+    }
+
+    updateRadar();
 </script>
 @endsection

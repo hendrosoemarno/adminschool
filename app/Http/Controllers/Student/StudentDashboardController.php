@@ -96,6 +96,7 @@ class StudentDashboardController extends Controller
 
     public function excellentScores(Request $request)
     {
+        if (!session('moodle_user')) return redirect()->route('moodle.login');
         $userId = session('moodle_user')['id'];
         
         // 1. Ambil nilai rata-rata per kategori soal (menggunakan service kalkulator kita)
@@ -110,10 +111,9 @@ class StudentDashboardController extends Controller
         
         // Ambil pemetaan lengkap beserta kodenya
         $mappings = DB::table('ai_competency_mapping')
-            ->join('ai_competencies_reguler', 'ai_competencies_reguler.id', '=', 'ai_competency_mapping.competency_id')
-            ->where('ai_competency_mapping.mapping_type', 'reguler')
-            ->whereIn('ai_competencies_reguler.course_id', [$courseId, 1])
-            ->select('ai_competency_mapping.moodle_category_id', 'ai_competencies_reguler.topic_code')
+            ->join('ai_competencies', 'ai_competencies.id', '=', 'ai_competency_mapping.competency_id')
+            ->whereIn('ai_competencies.course_id', [$courseId, 1])
+            ->select('ai_competency_mapping.moodle_category_id', 'ai_competencies.topic_code')
             ->get();
 
         $mapelScores = [];
@@ -154,7 +154,7 @@ class StudentDashboardController extends Controller
             
             if ($avgScore >= $targetSchool) {
                 // Cari nama panjang mapel dari Topik Master (misal MATSD -> Matematika)
-                $masterTopic = DB::table('ai_competencies_reguler')->where('topic_code', $mapelCode)->first();
+                $masterTopic = DB::table('ai_competencies')->where('topic_code', $mapelCode)->first();
                 $mapelName = $masterTopic ? $masterTopic->topic_name : $mapelCode;
 
                 $excellentData[$mapelName] = [
@@ -165,5 +165,193 @@ class StudentDashboardController extends Controller
         }
 
         return view('student.excellent_scores', compact('excellentData'));
+    }
+
+    public function growthDetails(Request $request)
+    {
+        if (!session('moodle_user')) return redirect()->route('moodle.login');
+        $userId = session('moodle_user')['id'];
+
+        $latestAttempt = DB::connection('moodle')->table('quiz_attempts as qa')
+            ->join('quiz as q', 'q.id', '=', 'qa.quiz')
+            ->where('qa.userid', $userId)
+            ->where('qa.state', 'finished')
+            ->orderBy('qa.timestart', 'desc')
+            ->first();
+
+        $courseId = $latestAttempt ? $latestAttempt->course : 1;
+
+        $snapshot = \App\Models\AiPerformanceSnapshot::where('user_id', $userId)
+            ->where('course_id', $courseId)
+            ->first();
+
+        $growthData = [];
+        $mapelName = 'Matematika';
+
+        if ($snapshot) {
+            $growth = $snapshot->growth_percentage ?? 0;
+            $status = $growth >= 10 ? 'EXCELLENT' : ($growth > 0 ? 'GOOD' : 'BAD');
+            $growthData[] = [
+                'mapel' => $mapelName,
+                'growth' => $growth,
+                'status' => $status,
+                'baseline' => $snapshot->baseline_score,
+                'current' => $snapshot->current_score,
+            ];
+        }
+
+        return view('student.growth_details', compact('growthData'));
+    }
+
+    public function alertScores(Request $request)
+    {
+        if (!session('moodle_user')) return redirect()->route('moodle.login');
+        $userId = session('moodle_user')['id'];
+
+        $latestAttempt = DB::connection('moodle')->table('quiz_attempts as qa')
+            ->join('quiz as q', 'q.id', '=', 'qa.quiz')
+            ->where('qa.userid', $userId)
+            ->where('qa.state', 'finished')
+            ->orderBy('qa.timestart', 'desc')
+            ->first();
+
+        $courseId = $latestAttempt ? $latestAttempt->course : 1;
+
+        $mappings = DB::table('ai_competency_mapping')
+            ->join('ai_competencies', 'ai_competencies.id', '=', 'ai_competency_mapping.competency_id')
+            ->whereIn('ai_competencies.course_id', [$courseId, 1])
+            ->select('ai_competency_mapping.moodle_category_id', 'ai_competencies.topic_code', 'ai_competencies.topic_name')
+            ->get();
+
+        $kkmSetting = \App\Models\AiKkmSetting::where('course_id', $courseId)->first();
+        $kkmScore = $kkmSetting->min_score ?? 70;
+
+        // Ambil quiz info untuk nama & tanggal
+        $quizInfo = DB::connection('moodle')->table('quiz_attempts as qa')
+            ->join('quiz as q', 'q.id', '=', 'qa.quiz')
+            ->where('qa.userid', $userId)
+            ->where('qa.state', 'finished')
+            ->orderBy('qa.timestart', 'desc')
+            ->select('q.name', 'qa.timestart')
+            ->first();
+
+        $quizName = $quizInfo->name ?? '-';
+        $quizDate = $quizInfo ? date('d M Y', $quizInfo->timestart) : '-';
+
+        $alertData = [];
+
+        foreach ($mappings as $mapping) {
+            $score = DB::connection('moodle')
+                ->table('question_attempts as qa')
+                ->join('question_attempt_steps as qas', 'qa.id', '=', 'qas.questionattemptid')
+                ->join('question_versions as qv', 'qa.questionid', '=', 'qv.questionid')
+                ->join('question_bank_entries as qbe', 'qv.questionbankentryid', '=', 'qbe.id')
+                ->join('quiz_attempts as quiza', 'qa.questionusageid', '=', 'quiza.uniqueid')
+                ->where('quiza.userid', $userId)
+                ->where('quiza.state', 'finished')
+                ->where('qbe.questioncategoryid', $mapping->moodle_category_id)
+                ->whereNotNull('qas.fraction')
+                ->avg('qas.fraction');
+
+            if ($score !== null) {
+                $pct = $score * 100;
+                if ($pct < $kkmScore) {
+                    $codeParts = explode('-', $mapping->topic_code);
+                    $mapelCode = $codeParts[0];
+
+                    if (!isset($alertData[$mapelCode])) {
+                        $masterTopic = DB::table('ai_competencies')
+                            ->where('topic_code', $mapelCode)->first();
+                        $alertData[$mapelCode] = [
+                            'name' => $masterTopic ? $masterTopic->topic_name : $mapelCode,
+                            'total' => 0,
+                            'count' => 0,
+                            'quiz_name' => $quizName,
+                            'quiz_date' => $quizDate,
+                            'kkm' => $kkmScore,
+                        ];
+                    }
+                    $alertData[$mapelCode]['total'] += $pct;
+                    $alertData[$mapelCode]['count']++;
+                }
+            }
+        }
+
+        return view('student.alert_scores', compact('alertData'));
+    }
+
+    public function topicAlerts(Request $request)
+    {
+        if (!session('moodle_user')) return redirect()->route('moodle.login');
+        $userId = session('moodle_user')['id'];
+
+        $latestAttempt = DB::connection('moodle')->table('quiz_attempts as qa')
+            ->join('quiz as q', 'q.id', '=', 'qa.quiz')
+            ->where('qa.userid', $userId)
+            ->where('qa.state', 'finished')
+            ->orderBy('qa.timestart', 'desc')
+            ->first();
+
+        $courseId = $latestAttempt ? $latestAttempt->course : 1;
+
+        $kkmSetting = \App\Models\AiKkmSetting::where('course_id', $courseId)->first();
+        $kkmScore = $kkmSetting->min_score ?? 70;
+
+        $mappings = DB::table('ai_competency_mapping')
+            ->join('ai_competencies', 'ai_competencies.id', '=', 'ai_competency_mapping.competency_id')
+            ->whereIn('ai_competencies.course_id', [$courseId, 1])
+            ->select('ai_competency_mapping.moodle_category_id', 'ai_competencies.topic_code', 'ai_competencies.topic_name')
+            ->get();
+
+        $quizInfo = DB::connection('moodle')->table('quiz_attempts as qa')
+            ->join('quiz as q', 'q.id', '=', 'qa.quiz')
+            ->where('qa.userid', $userId)
+            ->where('qa.state', 'finished')
+            ->orderBy('qa.timestart', 'desc')
+            ->select('q.name as quiz_name', 'qa.timestart')
+            ->first();
+
+        $topicAlerts = [];
+        $seenTopics = [];
+
+        foreach ($mappings as $mapping) {
+            $score = DB::connection('moodle')
+                ->table('question_attempts as qa')
+                ->join('question_attempt_steps as qas', 'qa.id', '=', 'qas.questionattemptid')
+                ->join('question_versions as qv', 'qa.questionid', '=', 'qv.questionid')
+                ->join('question_bank_entries as qbe', 'qv.questionbankentryid', '=', 'qbe.id')
+                ->join('quiz_attempts as quiza', 'qa.questionusageid', '=', 'quiza.uniqueid')
+                ->where('quiza.userid', $userId)
+                ->where('quiza.state', 'finished')
+                ->where('qbe.questioncategoryid', $mapping->moodle_category_id)
+                ->whereNotNull('qas.fraction')
+                ->avg('qas.fraction');
+
+            if ($score !== null) {
+                $pct = $score * 100;
+                if ($pct < $kkmScore) {
+                    $topicName = $mapping->topic_name;
+                    if (isset($seenTopics[$topicName])) continue;
+                    $seenTopics[$topicName] = true;
+
+                    $codeParts = explode('-', $mapping->topic_code);
+                    $mapelCode = $codeParts[0];
+                    $masterTopic = DB::table('ai_competencies')
+                        ->where('topic_code', $mapelCode)->first();
+                    $mapelName = $masterTopic ? $masterTopic->topic_name : $mapelCode;
+
+                    $topicAlerts[] = [
+                        'quiz_name' => $quizInfo->quiz_name ?? '-',
+                        'quiz_date' => $quizInfo ? date('d M Y', $quizInfo->timestart) : '-',
+                        'mapel' => $mapelName,
+                        'topic' => $topicName,
+                        'score' => round($pct, 1),
+                        'kkm' => $kkmScore,
+                    ];
+                }
+            }
+        }
+
+        return view('student.topic_alerts', compact('topicAlerts'));
     }
 }

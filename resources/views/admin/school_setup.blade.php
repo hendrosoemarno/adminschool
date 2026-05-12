@@ -30,6 +30,16 @@
             </div>
 
             <div style="margin-bottom: 1.5rem;">
+                <label class="text-xs font-bold text-slate-500 uppercase block mb-2">Jenjang</label>
+                <select name="jenjang" style="width: 100%; padding: 0.75rem 1rem; border-radius: 12px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-main);" required>
+                    <option value="">-- Pilih Jenjang --</option>
+                    <option value="sd">SD</option>
+                    <option value="smp">SMP</option>
+                    <option value="sma">SMA</option>
+                </select>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
                 <label class="text-xs font-bold text-slate-500 uppercase block mb-2">Alamat / Lokasi</label>
                 <textarea name="address" rows="3" placeholder="Alamat lengkap sekolah..." style="width: 100%; padding: 0.75rem 1rem; border-radius: 12px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-main);" required></textarea>
             </div>
@@ -49,6 +59,7 @@
                     <tr>
                         <th>NPSN</th>
                         <th>Nama Sekolah</th>
+                        <th>Jenjang</th>
                         <th>Alamat</th>
                         <th style="text-align: center;">Aksi</th>
                     </tr>
@@ -58,10 +69,11 @@
                     <tr>
                         <td class="text-xs font-bold text-slate-400">{{ $school->npsn }}</td>
                         <td class="font-bold">{{ $school->school_name }}</td>
+                        <td><span class="badge-{{ $school->jenjang == 'sd' ? 'primary' : ($school->jenjang == 'sma' ? 'success' : 'warning') }}">{{ strtoupper($school->jenjang ?? '-') }}</span></td>
                         <td class="text-xs text-slate-500">{{ $school->address }}</td>
                         <td style="text-align: center; display: flex; gap: 0.5rem; justify-content: center;">
                             <button class="btn-indigo" style="padding: 0.4rem; background: #f1f5f9; color: #475569;" 
-                                    onclick="openEditSchoolModal('{{ $school->id }}', '{{ $school->npsn }}', '{{ $school->school_name }}', '{{ $school->address }}')">
+                                    onclick="openEditSchoolModal('{{ $school->id }}', '{{ $school->npsn }}', '{{ $school->school_name }}', '{{ $school->address }}', '{{ $school->jenjang ?? '' }}')">
                                 <i data-lucide="edit-2" style="width: 14px;"></i>
                             </button>
                             <form action="{{ route('admin.school_delete', $school->id) }}" method="POST" onsubmit="return confirm('Hapus sekolah {{ $school->school_name }}? Data kelas dan guru di dalamnya akan ikut terhapus.')">
@@ -104,6 +116,15 @@
                 <label class="text-xs font-bold text-slate-500 uppercase block mb-2">Nama Sekolah</label>
                 <input type="text" name="school_name" id="edit_school_name" required style="width: 100%; padding: 0.75rem; border-radius: 12px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-main);">
             </div>
+            <div style="margin-bottom: 1.5rem;">
+                <label class="text-xs font-bold text-slate-500 uppercase block mb-2">Jenjang</label>
+                <select name="jenjang" id="edit_jenjang" style="width: 100%; padding: 0.75rem; border-radius: 12px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-main);">
+                    <option value="">-- Pilih --</option>
+                    <option value="sd">SD</option>
+                    <option value="smp">SMP</option>
+                    <option value="sma">SMA</option>
+                </select>
+            </div>
             <div style="margin-bottom: 2rem;">
                 <label class="text-xs font-bold text-slate-500 uppercase block mb-2">Alamat / Lokasi</label>
                 <textarea name="address" id="edit_address" rows="3" required style="width: 100%; padding: 0.75rem; border-radius: 12px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-main);"></textarea>
@@ -114,11 +135,12 @@
 </div>
 
 <script>
-    function openEditSchoolModal(id, npsn, name, address) {
+    function openEditSchoolModal(id, npsn, name, address, jenjang) {
         document.getElementById('editSchoolForm').action = '/admin/school-update/' + id;
         document.getElementById('edit_npsn').value = npsn;
         document.getElementById('edit_school_name').value = name;
         document.getElementById('edit_address').value = address;
+        document.getElementById('edit_jenjang').value = jenjang || '';
         document.getElementById('editSchoolModal').style.display = 'flex';
         lucide.createIcons();
     }

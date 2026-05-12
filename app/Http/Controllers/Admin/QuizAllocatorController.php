@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\AiCompetencyReguler;
+use App\Models\AiCompetency;
 use App\Models\AiSchool;
 
 class QuizAllocatorController extends Controller
@@ -13,7 +13,7 @@ class QuizAllocatorController extends Controller
     public function index()
     {
         // 1. Ambil semua kompetensi reguler
-        $competencies = AiCompetencyReguler::all();
+        $competencies = AiCompetency::where('type', 'pelajaran')->orWhere('type', 'topik')->get();
         $schools = AiSchool::all();
 
         // 2. Ambil semua kuis dari moodle (mdlax_quiz)
@@ -23,11 +23,11 @@ class QuizAllocatorController extends Controller
 
         // 3. Ambil data alokasi yang sudah ada
         $allocations = DB::table('ai_quiz_allocations')
-            ->join('ai_competencies_reguler', 'ai_competencies_reguler.id', '=', 'ai_quiz_allocations.competency_id')
+            ->join('ai_competencies', 'ai_competencies.id', '=', 'ai_quiz_allocations.competency_id')
             ->leftJoin('ai_schools', 'ai_schools.id', '=', 'ai_quiz_allocations.school_id')
             ->select(
                 'ai_quiz_allocations.*', 
-                'ai_competencies_reguler.topic_name as subject',
+                'ai_competencies.topic_name as subject',
                 'ai_schools.school_name'
             )
             ->get()

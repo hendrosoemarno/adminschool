@@ -107,6 +107,7 @@ Route::prefix('admin')->group(function () {
     Route::get('/competency-list', [App\Http\Controllers\Admin\CompetencyArchitectController::class, 'competencyList'])->name('admin.competency_list');
     Route::post('/competency-architect/auto-map', [App\Http\Controllers\Admin\CompetencyArchitectController::class, 'runAutoMapping'])->name('admin.competency_auto_map');
     Route::post('/competency-architect/update-kkm', [App\Http\Controllers\Admin\CompetencyArchitectController::class, 'updateKkm'])->name('admin.update_kkm');
+    Route::post('/competency-architect/update-benchmark', [App\Http\Controllers\Admin\CompetencyArchitectController::class, 'updateBenchmark'])->name('admin.update_benchmark');
     Route::post('/competency-architect/store', [App\Http\Controllers\Admin\CompetencyArchitectController::class, 'storeCompetency'])->name('admin.competency_store');
     Route::post('/competency-architect/update/{id}', [App\Http\Controllers\Admin\CompetencyArchitectController::class, 'updateCompetency'])->name('admin.competency_update');
     Route::post('/competency-architect/delete/{id}', [App\Http\Controllers\Admin\CompetencyArchitectController::class, 'deleteCompetency'])->name('admin.competency_delete');
@@ -162,6 +163,9 @@ Route::prefix('admin')->group(function () {
 
 Route::prefix('principal')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Principal\PrincipalDashboardController::class, 'index'])->name('principal.dashboard');
+    Route::get('/student-mastery', [App\Http\Controllers\Principal\PrincipalDashboardController::class, 'studentMastery'])->name('principal.student_mastery');
+    Route::get('/excellent-students', [App\Http\Controllers\Principal\PrincipalDashboardController::class, 'excellentStudents'])->name('principal.excellent_students');
+    Route::get('/alert-students', [App\Http\Controllers\Principal\PrincipalDashboardController::class, 'alertStudents'])->name('principal.alert_students');
 
     Route::get('/absent-students', function () {
         return view('principal.absent_students');
@@ -207,19 +211,13 @@ Route::prefix('homeroom')->group(function () {
 Route::prefix('student')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Student\StudentDashboardController::class, 'index'])->name('student.dashboard');
 
-    Route::get('/growth-details', function () {
-        return view('student.growth_details');
-    });
+    Route::get('/growth-details', [App\Http\Controllers\Student\StudentDashboardController::class, 'growthDetails'])->name('student.growth_details');
 
     Route::get('/excellent-scores', [App\Http\Controllers\Student\StudentDashboardController::class, 'excellentScores'])->name('student.excellent_scores');
 
-    Route::get('/alert-scores', function () {
-        return view('student.alert_scores');
-    });
+    Route::get('/alert-scores', [App\Http\Controllers\Student\StudentDashboardController::class, 'alertScores'])->name('student.alert_scores');
 
-    Route::get('/topic-alerts', function () {
-        return view('student.topic_alerts');
-    });
+    Route::get('/topic-alerts', [App\Http\Controllers\Student\StudentDashboardController::class, 'topicAlerts'])->name('student.topic_alerts');
 
     Route::get('/verify-identity', function () {
         return view('student.verify_identity');

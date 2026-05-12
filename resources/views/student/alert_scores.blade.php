@@ -23,20 +23,19 @@
                 </tr>
             </thead>
             <tbody>
+                @forelse($alertData as $code => $data)
                 <tr>
-                    <td class="font-bold">Kimia</td>
-                    <td style="text-align: center; color: #ef4444; font-weight: 800;">62.5</td>
-                    <td style="text-align: center;">75.0</td>
-                    <td>Try Out UTBK #1</td>
-                    <td>12 Feb 2026</td>
+                    <td class="font-bold">{{ $data['name'] }}</td>
+                    <td style="text-align: center; color: #ef4444; font-weight: 800;">{{ number_format($data['total'] / $data['count'], 1) }}</td>
+                    <td style="text-align: center;">{{ number_format($data['kkm'], 1) }}</td>
+                    <td>{{ $data['quiz_name'] }}</td>
+                    <td>{{ $data['quiz_date'] }}</td>
                 </tr>
+                @empty
                 <tr>
-                    <td class="font-bold">Biologi</td>
-                    <td style="text-align: center; color: #ef4444; font-weight: 800;">68.0</td>
-                    <td style="text-align: center;">75.0</td>
-                    <td>Evaluasi Mingguan</td>
-                    <td>05 Feb 2026</td>
+                    <td colspan="5" style="text-align: center; padding: 2rem;">Semua nilai Anda sudah di atas KKM. Pertahankan!</td>
                 </tr>
+                @endforelse
             </tbody>
         </table>
     </div>

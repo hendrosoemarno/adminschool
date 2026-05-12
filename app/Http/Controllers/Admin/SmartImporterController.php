@@ -87,6 +87,7 @@ class SmartImporterController extends Controller
         }
         
         $successCount = 0;
+        $nextUserId = DB::connection('moodle')->table('user')->max('id') + 1;
         
         foreach ($students as $student) {
             // 1. Cek apakah user sudah ada berdasarkan email atau NIS (username)
@@ -95,18 +96,20 @@ class SmartImporterController extends Controller
 
             $existingUser = DB::connection('moodle')->table('user')
                 ->where('username', $username)
-                ->orWhere('email', $email)
                 ->first();
 
-            if (!$existingUser) {
-                // Buat User Baru
-                $lastId = DB::connection('moodle')->table('user')->max('id');
-                $newUserId = $lastId + 1;
+            // Jika tidak ketemu username, cek email
+            if (!$existingUser && $email !== '-') {
+                $existingUser = DB::connection('moodle')->table('user')
+                    ->where('email', $email)
+                    ->first();
+            }
 
+            if (!$existingUser) {
                 $rawPassword = !empty($student['password']) ? $student['password'] : 'siswa123';
 
                 DB::connection('moodle')->table('user')->insert([
-                    'id' => $newUserId,
+                    'id' => $nextUserId,
                     'username' => $username,
                     'password' => password_hash($rawPassword, PASSWORD_BCRYPT),
                     'firstname' => $student['nama_depan'] ?? ($student['nama'] ?? '-'),
@@ -117,7 +120,8 @@ class SmartImporterController extends Controller
                     'timemodified' => time(),
                 ]);
                 
-                $userId = $newUserId;
+                $userId = $nextUserId;
+                $nextUserId++;
             } else {
                 $userId = $existingUser->id;
             }

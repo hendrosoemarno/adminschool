@@ -19,20 +19,25 @@ class HomeroomDashboardController extends Controller
 
     public function index(Request $request)
     {
-        // Asumsi: Kita ambil ID Kelas yang diampu Wali Kelas ini
-        // (Misal dari data session user Moodle yang login)
-        $classId = 1; 
+        $userId = session('moodle_user.id');
         $courseId = $request->input('course_id', 1);
 
-        // 1. Hitung Skor Kesehatan Kelas
-        $healthScore = $this->healthService->calculateClassHealth($classId, $courseId);
+        // Cari kelas yang diampu oleh wali kelas ini
+        $class = AiClass::where('homeroom_teacher_id', $userId)->first();
 
-        // 2. Ambil data daftar nilai siswa untuk tabel
-        // (Join snapshot dengan data user Moodle)
-        $students = AiPerformanceSnapshot::where('course_id', $courseId)
-            ->with('user')
-            ->get();
+        $class = AiClass::where('homeroom_teacher_id', $userId)->first();
 
-        return view('homeroom.dashboard', compact('healthScore', 'students'));
+        $students = collect([]);
+        $healthScore = 0;
+        $courseId = $request->input('course_id', 1);
+
+        if ($class) {
+            $healthScore = $this->healthService->calculateClassHealth($class->id, $courseId);
+            $students = AiPerformanceSnapshot::where('course_id', $courseId)
+                ->with('user')
+                ->get();
+        }
+
+        return view('homeroom.dashboard', compact('healthScore', 'students', 'class', 'courseId'));
     }
 }

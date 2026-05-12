@@ -23,30 +23,20 @@
                 </tr>
             </thead>
             <tbody>
+                @forelse($topicAlerts as $alert)
                 <tr>
-                    <td>Try Out UTBK #1</td>
-                    <td>12 Feb 2026</td>
-                    <td class="font-bold">Kimia</td>
-                    <td>Stoikiometri Dasar</td>
-                    <td style="text-align: center; color: #ef4444; font-weight: 800;">45.0</td>
-                    <td style="text-align: center;">75.0</td>
+                    <td>{{ $alert['quiz_name'] }}</td>
+                    <td>{{ $alert['quiz_date'] }}</td>
+                    <td class="font-bold">{{ $alert['mapel'] }}</td>
+                    <td>{{ $alert['topic'] }}</td>
+                    <td style="text-align: center; color: #ef4444; font-weight: 800;">{{ $alert['score'] }}</td>
+                    <td style="text-align: center;">{{ number_format($alert['kkm'], 1) }}</td>
                 </tr>
+                @empty
                 <tr>
-                    <td>Try Out UTBK #1</td>
-                    <td>12 Feb 2026</td>
-                    <td class="font-bold">Kimia</td>
-                    <td>Laju Reaksi</td>
-                    <td style="text-align: center; color: #ef4444; font-weight: 800;">58.0</td>
-                    <td style="text-align: center;">75.0</td>
+                    <td colspan="6" style="text-align: center; padding: 2rem;">Tidak ada topik yang nilainya di bawah KKM.</td>
                 </tr>
-                <tr>
-                    <td>Kuis Harian 2</td>
-                    <td>05 Feb 2026</td>
-                    <td class="font-bold">Fisika</td>
-                    <td>Hukum Newton II</td>
-                    <td style="text-align: center; color: #ef4444; font-weight: 800;">62.5</td>
-                    <td style="text-align: center;">75.0</td>
-                </tr>
+                @endforelse
             </tbody>
         </table>
     </div>

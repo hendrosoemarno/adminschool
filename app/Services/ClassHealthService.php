@@ -15,12 +15,12 @@ class ClassHealthService
     public function calculateClassHealth($classId, $courseId)
     {
         $class = AiClass::find($classId);
+        if (!$class) return 0;
         
         // 1. Dapatkan daftar ID siswa di kelas ini dari Moodle
-        // Asumsi: Kita memfilter berdasarkan custom profile field yang sesuai dengan sekolah/kelas
         $studentIds = DB::connection('moodle')
             ->table('user_info_data')
-            ->where('data', $class->class_name) // Contoh: Filter berdasarkan nama kelas
+            ->where('data', $class->class_name)
             ->pluck('userid');
 
         if ($studentIds->isEmpty()) return 0;

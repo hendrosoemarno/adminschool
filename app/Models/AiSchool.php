@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class AiSchool extends Model
 {
     protected $table = 'ai_schools';
-    protected $fillable = ['npsn', 'school_name', 'address', 'principal_name'];
+    protected $fillable = ['npsn', 'school_name', 'jenjang', 'address', 'principal_name'];
 
     public function classes()
     {

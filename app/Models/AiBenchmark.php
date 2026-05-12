@@ -8,7 +8,7 @@ class AiBenchmark extends Model
 {
     protected $table = 'ai_benchmarks';
     protected $fillable = [
-        'course_id', 'school_id', 'target_national', 
+        'course_id', 'school_id', 'competency_id', 'target_national', 
         'target_province', 'target_city', 'target_school', 'academic_year'
     ];
 

@@ -8,12 +8,12 @@
 <div class="stat-group" style="margin-bottom: 2rem;">
     <div class="modern-card">
         <div class="text-xs font-bold text-slate-500 uppercase mb-1">Total Sekolah Mitra</div>
-        <div class="text-3xl font-bold text-slate-800">12</div>
+        <div class="text-3xl font-bold text-slate-800">{{ $totalSchools }}</div>
         <p class="text-xs text-slate-500 mt-2">Terdaftar di Sistem</p>
     </div>
     <div class="modern-card">
         <div class="text-xs font-bold text-slate-500 uppercase mb-1">Siswa Terintegrasi</div>
-        <div class="text-3xl font-bold text-slate-800">1,284</div>
+        <div class="text-3xl font-bold text-slate-800">{{ number_format($totalStudents) }}</div>
         <p class="text-xs text-emerald-600 mt-2 font-bold">Semua Aktif</p>
     </div>
 </div>
@@ -30,9 +30,9 @@
         <table>
             <thead>
                 <tr>
-                    <th>Nama Sekolah</th>
                     <th>ID Organisasi</th>
-                    <th>Tipe</th>
+                    <th>Nama Sekolah</th>
+                    <th>Jenjang</th>
                     <th>Jumlah Siswa</th>
                     <th>Lokasi</th>
                     <th>Status</th>
@@ -41,11 +41,11 @@
             <tbody>
                 @forelse($schools as $school)
                 <tr onclick="window.location='{{ route('admin.org_detail', $school->id) }}'" style="cursor: pointer;">
+                    <td class="text-xs font-bold text-slate-400">ORG-{{ str_pad($school->id, 3, '0', STR_PAD_LEFT) }}</td>
                     <td class="font-bold text-indigo-600">{{ $school->school_name }}</td>
-                    <td>ORG-{{ str_pad($school->id, 3, '0', STR_PAD_LEFT) }}</td>
-                    <td><span class="badge-primary">MITRA</span></td>
-                    <td>0 Siswa</td>
-                    <td>{{ Str::limit($school->address, 30) }}</td>
+                    <td><span class="badge-{{ $school->jenjang == 'sd' ? 'primary' : ($school->jenjang == 'sma' ? 'success' : 'warning') }}">{{ strtoupper($school->jenjang ?? '-') }}</span></td>
+                    <td>{{ number_format($schoolStudentCounts[$school->id] ?? 0) }} Siswa</td>
+                    <td class="text-xs text-slate-500">{{ Str::limit($school->address, 35) }}</td>
                     <td><span class="badge-success">ACTIVE</span></td>
                 </tr>
                 @empty

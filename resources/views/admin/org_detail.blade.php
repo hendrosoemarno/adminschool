@@ -12,9 +12,9 @@
 <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
     <!-- School Profile Summary -->
     <div class="modern-card" style="border-left: 4px solid var(--primary);">
-        <div class="text-xs font-bold text-slate-500 uppercase mb-1">Status Lisensi</div>
-        <div class="text-2xl font-bold text-slate-800">Premium AI</div>
-        <p class="text-xs text-emerald-600 mt-2 font-bold">Aktif s/d 2027</p>
+        <div class="text-xs font-bold text-slate-500 uppercase mb-1">Status Sekolah</div>
+        <div class="text-2xl font-bold text-slate-800">{{ $school->school_name }}</div>
+        <p class="text-xs text-emerald-600 mt-2 font-bold">NPSN: {{ $school->npsn }} | {{ strtoupper($school->jenjang ?? '-') }}</p>
     </div>
 
     <!-- Rombongan Belajar Card -->
@@ -43,27 +43,33 @@
     <!-- School Profile Card -->
     <div class="modern-card">
         <h3 class="text-slate-800 font-bold mb-6">Profil Sekolah</h3>
-        <div style="display: flex; gap: 2rem; margin-bottom: 2rem;">
-            <div style="width: 120px; height: 120px; background: #f8fafc; border: 2px dashed var(--border); border-radius: 24px; display: flex; align-items: center; justify-content: center; position: relative;">
-                <i data-lucide="image" style="width: 32px; color: var(--text-sub);"></i>
-                <div style="position: absolute; bottom: -10px; right: -10px; background: var(--primary); width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; cursor: pointer;">
-                    <i data-lucide="edit-3" style="width: 16px;"></i>
-                </div>
+        <form action="{{ route('admin.school_update', $school->id) }}" method="POST" style="display: flex; flex-direction: column; gap: 1rem;">
+            @csrf
+            <div>
+                <label class="text-xs font-bold text-slate-500 uppercase">Nama Sekolah</label>
+                <input type="text" name="school_name" value="{{ $school->school_name }}" style="width: 100%; padding: 0.75rem; border-radius: 12px; border: 1px solid var(--border); margin-top: 0.5rem; background: var(--bg-card); color: var(--text-main);" required>
             </div>
-            <div style="flex: 1;">
-                <form style="display: flex; flex-direction: column; gap: 1rem;">
-                    <div>
-                        <label class="text-xs font-bold text-slate-500 uppercase">Nama Sekolah</label>
-                        <input type="text" value="{{ $school->school_name }}" style="width: 100%; padding: 0.75rem; border-radius: 12px; border: 1px solid var(--border); margin-top: 0.5rem; background: var(--bg-card); color: var(--text-main);">
-                    </div>
-                    <div>
-                        <label class="text-xs font-bold text-slate-500 uppercase">NPSN</label>
-                        <input type="text" value="{{ $school->npsn }}" style="width: 100%; padding: 0.75rem; border-radius: 12px; border: 1px solid var(--border); margin-top: 0.5rem; background: var(--bg-card); color: var(--text-main);">
-                    </div>
-                </form>
+            <div>
+                <label class="text-xs font-bold text-slate-500 uppercase">NPSN</label>
+                <input type="text" name="npsn" value="{{ $school->npsn }}" style="width: 100%; padding: 0.75rem; border-radius: 12px; border: 1px solid var(--border); margin-top: 0.5rem; background: var(--bg-card); color: var(--text-main);" required>
             </div>
-        </div>
-        <button class="btn-indigo" style="width: 100%; justify-content: center;">Simpan Profil</button>
+            <div>
+                <label class="text-xs font-bold text-slate-500 uppercase">Jenjang</label>
+                <select name="jenjang" style="width: 100%; padding: 0.75rem; border-radius: 12px; border: 1px solid var(--border); margin-top: 0.5rem; background: var(--bg-card); color: var(--text-main);">
+                    <option value="">-- Pilih --</option>
+                    <option value="sd" {{ $school->jenjang == 'sd' ? 'selected' : '' }}>SD</option>
+                    <option value="smp" {{ $school->jenjang == 'smp' ? 'selected' : '' }}>SMP</option>
+                    <option value="sma" {{ $school->jenjang == 'sma' ? 'selected' : '' }}>SMA</option>
+                </select>
+            </div>
+            <div>
+                <label class="text-xs font-bold text-slate-500 uppercase">Alamat / Lokasi</label>
+                <textarea name="address" rows="3" style="width: 100%; padding: 0.75rem; border-radius: 12px; border: 1px solid var(--border); margin-top: 0.5rem; background: var(--bg-card); color: var(--text-main);">{{ $school->address }}</textarea>
+            </div>
+            <button type="submit" class="btn-indigo" style="width: 100%; justify-content: center; margin-top: 0.5rem;">
+                <i data-lucide="save" style="width: 16px;"></i> Simpan Profil
+            </button>
+        </form>
     </div>
 
     <!-- Academic Term Card -->
