@@ -18,7 +18,7 @@
         .school-info h2 { font-size:1.5rem; }
         .school-info .jenjang { background:#4f46e515; color:#4f46e5; padding:0.3rem 1rem; border-radius:9999px; font-size:0.8rem; font-weight:700; }
         .stats { display:grid; grid-template-columns:repeat(5,1fr); gap:1.5rem; margin-bottom:2rem; }
-        .stat-card { background:white; border-radius:20px; padding:1.5rem; cursor:pointer; transition:all 0.2s; }
+        .stat-card { background:white; border-radius:20px; padding:1.5rem; cursor:pointer; transition:all 0.2s; text-decoration:none; display:block; color:inherit; }
         .stat-card:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(0,0,0,0.08); }
         .stat-card .label { font-size:0.7rem; font-weight:700; color:#94a3b8; text-transform:uppercase; margin-bottom:0.5rem; }
         .stat-card .value { font-size:2rem; font-weight:800; }
@@ -68,26 +68,26 @@
 
     <!-- Stats -->
     <div class="stats">
-        <div class="stat-card" style="border-left:4px solid #4f46e5;">
+        <a href="/demo/principal/student-mastery" class="stat-card" style="border-left:4px solid #4f46e5;">
             <div class="label">Rata-rata Mastery</div>
             <div class="value" style="color:#1e293b;">78.3</div>
             <div class="sub">Skor rata-rata seluruh siswa</div>
-        </div>
-        <div class="stat-card" style="border-left:4px solid #059669;">
+        </a>
+        <a href="/demo/principal/excellent" class="stat-card" style="border-left:4px solid #059669;">
             <div class="label">Excellent Rate</div>
             <div class="value" style="color:#059669;">64%</div>
             <div class="sub">23 siswa di atas target (75)</div>
-        </div>
-        <div class="stat-card" style="border-left:4px solid #dc2626;">
+        </a>
+        <a href="/demo/principal/alert" class="stat-card" style="border-left:4px solid #dc2626;">
             <div class="label">Alert Rate</div>
             <div class="value" style="color:#dc2626;">22%</div>
             <div class="sub">8 siswa di bawah KKM (70)</div>
-        </div>
-        <div class="stat-card" style="border-left:4px solid #dc2626;">
+        </a>
+        <a href="/demo/principal/alert-groups" class="stat-card" style="border-left:4px solid #dc2626;">
             <div class="label">Kelompok Alert</div>
             <div class="value" style="color:#dc2626;">12 <span style="font-size:0.85rem;font-weight:400;color:#94a3b8;">Kelompok</span></div>
             <div class="sub">Topik dengan siswa di bawah KKM</div>
-        </div>
+        </a>
         <div class="stat-card" style="border-left:4px solid #d97706;">
             <div class="label">Rata-rata Growth</div>
             <div class="value" style="color:#d97706;">+4.7%</div>

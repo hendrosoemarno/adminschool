@@ -13,6 +13,10 @@ use App\Http\Controllers\StudentTryoutWhatsappController;
 Route::get('/demo/principal', function () {
     return view('principal.demo');
 });
+Route::get('/demo/principal/student-mastery', function () { return view('principal.demo_student_mastery'); });
+Route::get('/demo/principal/excellent', function () { return view('principal.demo_excellent'); });
+Route::get('/demo/principal/alert', function () { return view('principal.demo_alert'); });
+Route::get('/demo/principal/alert-groups', function () { return view('principal.demo_alert_groups'); });
 
 Route::get('/', function () {
     return view('welcome');
