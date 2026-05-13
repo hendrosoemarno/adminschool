@@ -144,8 +144,8 @@
         data: {
             labels: ['Ke-1', 'Ke-2', 'Ke-3'],
             datasets: [
-                { label: 'Matematika', data: [65.2, 72.8, 78.5], borderColor: '#4f46e5', backgroundColor: 'rgba(79,70,229,0.1)', fill: true, tension: 0.3, pointRadius: 4, borderWidth: 2 },
-                { label: 'Bahasa Indonesia', data: [70.1, 76.5, 82.1], borderColor: '#059669', backgroundColor: 'rgba(5,150,105,0.1)', fill: true, tension: 0.3, pointRadius: 4, borderWidth: 2 }
+                { label: 'Matematika', data: [45, 55, 75], borderColor: '#4f46e5', backgroundColor: 'rgba(79,70,229,0.1)', fill: true, tension: 0.3, pointRadius: 4, borderWidth: 2 },
+                { label: 'Bahasa Indonesia', data: [60, 75, 85], borderColor: '#059669', backgroundColor: 'rgba(5,150,105,0.1)', fill: true, tension: 0.3, pointRadius: 4, borderWidth: 2 }
             ]
         },
         options: {
