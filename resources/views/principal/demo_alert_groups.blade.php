@@ -15,11 +15,6 @@ $groups = [
         'Ide pokok' => [['name'=>'Hafsa Arumi','score'=>58]],
         'Makna ungkapan' => [['name'=>'Hafsa Arumi','score'=>65],['name'=>'Muhammad Fayyadh','score'=>58]],
     ],
-    'IPA' => [
-        'Sistem gerak' => [['name'=>'Aisyah Humaira','score'=>68],['name'=>'Hafsa Arumi','score'=>55],['name'=>'Muhammad Fayyadh','score'=>60]],
-        'Pencernaan' => [['name'=>'Aisyah Humaira','score'=>65],['name'=>'Hafsa Arumi','score'=>58],['name'=>'Muhammad Fayyadh','score'=>55]],
-        'Peredaran darah' => [['name'=>'Hafsa Arumi','score'=>62],['name'=>'Muhammad Fayyadh','score'=>65]],
-    ],
 ];
 @endphp
 <div class="modern-card" style="margin-bottom:2rem;"><p class="text-slate-500">Sekolah: <strong>SD NEGERI 1 HARAPAN BANGSA</strong> — KKM: 70</p></div>

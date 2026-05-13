@@ -106,7 +106,6 @@
                 <tbody>
                     <tr><td style="font-weight:600;">Matematika</td><td style="text-align:center;">36</td><td style="text-align:center;font-weight:700;color:#059669;">78.5</td><td style="text-align:center;"><div class="progress"><div class="progress-fill" style="width:64%;background:#059669;"></div></div></td></tr>
                     <tr><td style="font-weight:600;">Bahasa Indonesia</td><td style="text-align:center;">36</td><td style="text-align:center;font-weight:700;color:#059669;">82.1</td><td style="text-align:center;"><div class="progress"><div class="progress-fill" style="width:72%;background:#059669;"></div></div></td></tr>
-                    <tr><td style="font-weight:600;">IPA</td><td style="text-align:center;">36</td><td style="text-align:center;font-weight:700;color:#d97706;">71.3</td><td style="text-align:center;"><div class="progress"><div class="progress-fill" style="width:44%;background:#d97706;"></div></div></td></tr>
                 </tbody>
             </table>
         </div>
@@ -146,8 +145,7 @@
             labels: ['Ke-1', 'Ke-2', 'Ke-3'],
             datasets: [
                 { label: 'Matematika', data: [65.2, 72.8, 78.5], borderColor: '#4f46e5', backgroundColor: 'rgba(79,70,229,0.1)', fill: true, tension: 0.3, pointRadius: 4, borderWidth: 2 },
-                { label: 'Bahasa Indonesia', data: [70.1, 76.5, 82.1], borderColor: '#059669', backgroundColor: 'rgba(5,150,105,0.1)', fill: true, tension: 0.3, pointRadius: 4, borderWidth: 2 },
-                { label: 'IPA', data: [60.5, 66.2, 71.3], borderColor: '#d97706', backgroundColor: 'rgba(217,119,6,0.1)', fill: true, tension: 0.3, pointRadius: 4, borderWidth: 2 }
+                { label: 'Bahasa Indonesia', data: [70.1, 76.5, 82.1], borderColor: '#059669', backgroundColor: 'rgba(5,150,105,0.1)', fill: true, tension: 0.3, pointRadius: 4, borderWidth: 2 }
             ]
         },
         options: {

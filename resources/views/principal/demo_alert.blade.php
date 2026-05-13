@@ -14,11 +14,6 @@ $subjectSections = [
         ['name'=>'Hafsa Arumi','topics'=>['Identifikasi objek'=>62,'Kosakata'=>75,'Ide pokok'=>58,'Informasi tersurat'=>70,'Makna ungkapan'=>65]],
         ['name'=>'Muhammad Fayyadh','topics'=>['Identifikasi objek'=>55,'Kosakata'=>68,'Ide pokok'=>72,'Informasi tersurat'=>60,'Makna ungkapan'=>58]],
     ]],
-    'IPA' => ['kkm'=>70,'topics'=>['Sistem gerak','Peredaran darah','Pencernaan','Ekosistem'],'students'=>[
-        ['name'=>'Aisyah Humaira','topics'=>['Sistem gerak'=>68,'Peredaran darah'=>72,'Pencernaan'=>65,'Ekosistem'=>75]],
-        ['name'=>'Hafsa Arumi','topics'=>['Sistem gerak'=>55,'Peredaran darah'=>62,'Pencernaan'=>58,'Ekosistem'=>70]],
-        ['name'=>'Muhammad Fayyadh','topics'=>['Sistem gerak'=>60,'Peredaran darah'=>65,'Pencernaan'=>55,'Ekosistem'=>68]],
-    ]],
 ];
 @endphp
 <div class="modern-card" style="margin-bottom:2rem;"><p class="text-slate-500">Sekolah: <strong>SD NEGERI 1 HARAPAN BANGSA</strong> — KKM: {{ $kkm }}</p></div>
