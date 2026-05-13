@@ -278,7 +278,19 @@
                 </button>
             </form>
 
-            <div style="margin-top: 3rem; text-align: center;">
+            <div style="margin-top: 1.5rem; position:relative;">
+                <div style="display:flex; align-items:center; gap:1rem; margin-bottom:1rem;">
+                    <div style="flex:1; height:1px; background:var(--border);"></div>
+                    <span style="color:#64748b; font-size:0.75rem; font-weight:600; text-transform:uppercase;">Demo</span>
+                    <div style="flex:1; height:1px; background:var(--border);"></div>
+                </div>
+                <a href="/demo/principal" style="display:block; width:100%; padding:0.85rem; background:rgba(5,150,105,0.15); color:#34d399; border:1px solid rgba(5,150,105,0.3); border-radius:16px; font-size:0.9rem; font-weight:700; text-decoration:none; text-align:center; transition:all 0.3s;">
+                    <i data-lucide="presentation" style="width:18px; vertical-align:middle; margin-right:0.5rem;"></i>
+                    Demo Dashboard Kepala Sekolah
+                </a>
+            </div>
+
+            <div style="margin-top: 2.5rem; text-align: center;">
                 <p style="font-size: 0.8rem; color: #64748b;">
                     &copy; 2026 AI Learning Architecture. All rights reserved.
                 </p>
