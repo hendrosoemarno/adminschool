@@ -43,6 +43,11 @@
         <div class="text-3xl font-bold text-rose-600">{{ $alertRate }}%</div>
         <p class="text-xs text-slate-500 mt-2">{{ $alertCount }} siswa di bawah KKM ({{ $kkmScore }})</p>
     </div>
+    <div class="modern-card" onclick="window.location='/principal/alert-groups'" style="cursor:pointer; border-left:4px solid #dc2626;">
+        <div class="text-xs font-bold text-slate-500 uppercase mb-1">Kelompok Alert</div>
+        <div class="text-3xl font-bold text-rose-600">{{ $alertGroupCount ?? 0 }} <span class="text-sm font-normal text-slate-400">Kelompok</span></div>
+        <p class="text-xs text-slate-500 mt-2">Topik dengan siswa di bawah KKM</p>
+    </div>
     <div class="modern-card" style="border-left:4px solid #f59e0b;">
         <div class="text-xs font-bold text-slate-500 uppercase mb-1">Rata-rata Growth</div>
         <div class="text-3xl font-bold text-amber-600">{{ $avgGrowth }}%</div>

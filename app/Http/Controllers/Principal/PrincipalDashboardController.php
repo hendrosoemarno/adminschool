@@ -206,11 +206,32 @@ class PrincipalDashboardController extends Controller
             ];
         }
 
+        // Hitung jumlah kelompok alert (topic-mapel yang ada siswa < KKM)
+        $alertGroupCount = 0;
+        $alertGroups = [];
+        $calcService = app(\App\Services\PerformanceCalculationService::class);
+        foreach ($enrolledUserIds as $uid) {
+            if ($uid <= 2) continue;
+            $snap = $snapshots->firstWhere('user_id', $uid);
+            if (!$snap) continue;
+            $masteryData = $calcService->calculateUserMastery($uid, $snap->course_id);
+            if (empty($masteryData)) continue;
+            foreach ($masteryData as $topic => $d) {
+                if ($d['score'] < $kkmScore) {
+                    $codeParts = explode('-', $d['topic_code'] ?? '');
+                    $prefix = $codeParts[0] ?? '';
+                    $key = $prefix . '|' . $topic;
+                    $alertGroups[$key] = true;
+                }
+            }
+        }
+        $alertGroupCount = count($alertGroups);
+
         return view('principal.dashboard', compact(
             'school', 'totalStudents', 'excellentRate', 'alertRate',
             'avgMastery', 'avgGrowth', 'targetSchool', 'kkmScore',
             'subjectStats', 'classMatrix', 'trendLabels', 'trendDatasets', 'subjectHasTrend',
-            'excellentCount', 'alertCount'
+            'excellentCount', 'alertCount', 'alertGroupCount'
         ));
     }
 
@@ -325,7 +346,10 @@ class PrincipalDashboardController extends Controller
         if (!$school) return view('principal.alert_students', ['error' => 'Sekolah tidak ditemukan.']);
         $schoolId = $school->id;
 
+        // Ambil subjects (pelajaran) sesuai jenjang sekolah
         $subjects = AiCompetency::where('type', 'pelajaran')->where('jenjang', $school->jenjang)->get();
+        $kkmScore = 70; // KKM default
+
         $courseIds = DB::table('ai_school_courses')->where('school_id', $schoolId)->pluck('moodle_course_id')->toArray();
         if (empty($courseIds)) $courseIds = [1];
 
@@ -335,38 +359,129 @@ class PrincipalDashboardController extends Controller
 
         $snapshots = AiPerformanceSnapshot::whereIn('user_id', $enrolledUserIds)->get()->keyBy('user_id');
 
-        $students = [];
+        // Bangun data: [subject_code => [subject_name, kkm, topics => [topic_name], students => [...]]]
+        $subjectSections = [];
+
+        foreach ($subjects as $sub) {
+            $prefix = $sub->topic_code;
+            $subjectSections[$prefix] = [
+                'name' => $sub->topic_name,
+                'kkm' => $kkmScore,
+                'students' => [],
+            ];
+        }
+
+        // Kumpulkan semua topik per subject
+        $allTopics = AiCompetency::where('type', 'topik')->get();
+        foreach ($allTopics as $t) {
+            $codeParts = explode('-', $t->topic_code ?? '');
+            $prefix = $codeParts[0] ?? '';
+            if (isset($subjectSections[$prefix])) {
+                $subjectSections[$prefix]['topics'][$t->topic_name] = $t->topic_name;
+            }
+        }
+
+        // Proses tiap siswa
+        $calcService = app(\App\Services\PerformanceCalculationService::class);
         foreach ($enrolledUserIds as $uid) {
             if ($uid <= 2) continue;
             $user = DB::connection('moodle')->table('user')->where('id', $uid)->select('id','firstname','lastname')->first();
             if (!$user) continue;
             $snap = $snapshots->get($uid);
-            if (!$snap || ($snap->current_score ?? 0) >= 70) continue;
+            if (!$snap) continue;
 
-            $userCourseIds = DB::connection('moodle')->table('user_enrolments as ue')
-                ->join('enrol as e', 'e.id', '=', 'ue.enrolid')
-                ->where('ue.userid', $uid)->whereIn('e.courseid', $courseIds)->pluck('e.courseid')->toArray();
-            $className = '-';
-            foreach ($userCourseIds as $ucId) {
-                $class = DB::table('ai_classes')->where('moodle_course_id', $ucId)->where('school_id', $schoolId)->first();
-                if ($class) { $className = $class->class_name; break; }
-            }
-
-            $subjectScores = [];
-            $calcService = app(\App\Services\PerformanceCalculationService::class);
             $masteryData = $calcService->calculateUserMastery($uid, $snap->course_id);
-            foreach ($subjects as $sub) {
-                $prefix = $sub->topic_code; $total = 0; $count = 0;
-                foreach ($masteryData as $topic => $d) {
-                    $codeParts = explode('-', $d['topic_code'] ?? '');
-                    if (($codeParts[0] ?? '') === $prefix) { $total += $d['score']; $count++; }
-                }
-                $subjectScores[$sub->topic_name] = $count > 0 ? round($total / $count, 1) : '-';
+            if (empty($masteryData)) continue;
+
+            // Kelompokkan per subject
+            $userName = $user->firstname . ' ' . $user->lastname;
+            $hasAnyAlert = false;
+            $perSubjectTopics = [];
+
+            foreach ($masteryData as $topic => $d) {
+                $codeParts = explode('-', $d['topic_code'] ?? '');
+                $prefix = $codeParts[0] ?? '';
+                if (!isset($subjectSections[$prefix])) continue;
+
+                $score = round($d['score'], 1);
+                $perSubjectTopics[$prefix][$topic] = $score;
+                if ($score < $kkmScore) $hasAnyAlert = true;
             }
 
-            $students[] = ['name' => $user->firstname . ' ' . $user->lastname, 'class' => $className, 'subjectScores' => $subjectScores];
+            if ($hasAnyAlert) {
+                foreach ($perSubjectTopics as $prefix => $topics) {
+                    $subjectSections[$prefix]['students'][] = [
+                        'name' => $userName,
+                        'topics' => $topics,
+                    ];
+                }
+            }
         }
 
-        return view('principal.alert_students', compact('school', 'subjects', 'students'));
+        return view('principal.alert_students', compact('school', 'subjectSections'));
+    }
+
+    public function alertGroups(Request $request)
+    {
+        $userId = session('moodle_user.id');
+        $school = AiSchool::where('principal_name', $userId)->first();
+        if (!$school) return view('principal.alert_groups', ['error' => 'Sekolah tidak ditemukan.']);
+        $schoolId = $school->id;
+
+        $kkmScore = 70;
+
+        $courseIds = DB::table('ai_school_courses')->where('school_id', $schoolId)->pluck('moodle_course_id')->toArray();
+        if (empty($courseIds)) $courseIds = [1];
+
+        $enrolledUserIds = DB::connection('moodle')->table('user_enrolments as ue')
+            ->join('enrol as e', 'e.id', '=', 'ue.enrolid')
+            ->whereIn('e.courseid', $courseIds)->distinct()->pluck('ue.userid')->toArray();
+
+        $snapshots = AiPerformanceSnapshot::whereIn('user_id', $enrolledUserIds)->get()->keyBy('user_id');
+        $calcService = app(\App\Services\PerformanceCalculationService::class);
+
+        // [prefix => [subject_name => ..., groups => [topicName => [['name'=>...,'score'=>...]]]]]
+        $groups = [];
+
+        foreach ($enrolledUserIds as $uid) {
+            if ($uid <= 2) continue;
+            $user = DB::connection('moodle')->table('user')->where('id', $uid)->select('id','firstname','lastname')->first();
+            if (!$user) continue;
+            $snap = $snapshots->get($uid);
+            if (!$snap) continue;
+
+            $masteryData = $calcService->calculateUserMastery($uid, $snap->course_id);
+            if (empty($masteryData)) continue;
+
+            $userName = $user->firstname . ' ' . $user->lastname;
+
+            foreach ($masteryData as $topic => $d) {
+                $score = round($d['score'], 1);
+                if ($score >= $kkmScore) continue;
+
+                $codeParts = explode('-', $d['topic_code'] ?? '');
+                $prefix = $codeParts[0] ?? '';
+
+                // Cari nama subject
+                $subject = DB::table('ai_competencies')
+                    ->where('type', 'pelajaran')
+                    ->where('topic_code', $prefix)
+                    ->first();
+                $subjectName = $subject->topic_name ?? $prefix;
+
+                if (!isset($groups[$prefix])) {
+                    $groups[$prefix] = ['name' => $subjectName, 'groups' => []];
+                }
+                if (!isset($groups[$prefix]['groups'][$topic])) {
+                    $groups[$prefix]['groups'][$topic] = [];
+                }
+                $groups[$prefix]['groups'][$topic][] = [
+                    'name' => $userName,
+                    'score' => $score,
+                ];
+            }
+        }
+
+        return view('principal.alert_groups', compact('school', 'groups', 'kkmScore'));
     }
 }

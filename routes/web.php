@@ -166,6 +166,7 @@ Route::prefix('principal')->group(function () {
     Route::get('/student-mastery', [App\Http\Controllers\Principal\PrincipalDashboardController::class, 'studentMastery'])->name('principal.student_mastery');
     Route::get('/excellent-students', [App\Http\Controllers\Principal\PrincipalDashboardController::class, 'excellentStudents'])->name('principal.excellent_students');
     Route::get('/alert-students', [App\Http\Controllers\Principal\PrincipalDashboardController::class, 'alertStudents'])->name('principal.alert_students');
+    Route::get('/alert-groups', [App\Http\Controllers\Principal\PrincipalDashboardController::class, 'alertGroups'])->name('principal.alert_groups');
 
     Route::get('/absent-students', function () {
         return view('principal.absent_students');
