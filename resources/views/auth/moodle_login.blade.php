@@ -284,7 +284,7 @@
                     <span style="color:#64748b; font-size:0.75rem; font-weight:600; text-transform:uppercase;">Demo</span>
                     <div style="flex:1; height:1px; background:var(--border);"></div>
                 </div>
-                <a href="/demo/principal" style="display:block; width:100%; padding:0.85rem; background:rgba(5,150,105,0.15); color:#34d399; border:1px solid rgba(5,150,105,0.3); border-radius:16px; font-size:0.9rem; font-weight:700; text-decoration:none; text-align:center; transition:all 0.3s;">
+                <a href="/demo" style="display:block; width:100%; padding:0.85rem; background:rgba(5,150,105,0.15); color:#34d399; border:1px solid rgba(5,150,105,0.3); border-radius:16px; font-size:0.9rem; font-weight:700; text-decoration:none; text-align:center; transition:all 0.3s;">
                     <i data-lucide="presentation" style="width:18px; vertical-align:middle; margin-right:0.5rem;"></i>
                     Demo Dashboard Kepala Sekolah
                 </a>

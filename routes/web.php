@@ -10,6 +10,9 @@ use App\Http\Controllers\StudentTryoutBasicController;
 use App\Http\Controllers\StudentTryoutFullController;
 use App\Http\Controllers\StudentTryoutWhatsappController;
 
+Route::get('/demo', function () {
+    return view('demo.login');
+});
 Route::get('/demo/principal', function () {
     return view('principal.demo');
 });
