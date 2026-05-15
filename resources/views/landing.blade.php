@@ -77,7 +77,12 @@
         .trusted-logos { display:flex; justify-content:center; gap:3rem; align-items:center; flex-wrap:wrap; }
         .trusted-logos span { font-size:1rem; font-weight:700; color:#94a3b8; opacity:0.5; }
         .map-visual { margin:3rem auto 0; max-width:600px; position:relative; }
-        .map-dots { display:flex; flex-wrap:wrap; justify-content:center; gap:1.5rem; }
+        .map-image { width:100%; aspect-ratio:16/9; border-radius:20px; background:linear-gradient(135deg,#f1f5f9,#e2e8f0); border:1px solid #e2e8f0; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative; }
+        .map-image .placeholder-icon { color:#94a3b8; text-align:center; }
+        .map-image .placeholder-icon i { width:48px; height:48px; color:#cbd5e1; }
+        .map-image .placeholder-icon p { font-size:0.9rem; color:#94a3b8; margin-top:0.75rem; font-weight:600; }
+        .map-image .placeholder-icon span { font-size:0.8rem; color:#cbd5e1; display:block; margin-top:0.25rem; }
+        .map-dots { display:flex; flex-wrap:wrap; justify-content:center; gap:1.5rem; margin-top:2rem; }
         .map-dot { display:flex; align-items:center; gap:0.5rem; font-size:0.85rem; color:#475569; }
         .map-dot i { color:#059669; width:16px; }
 
@@ -220,6 +225,13 @@
             <div><div class="trusted-number">220+</div><div class="trusted-label">Asal Institusi Pendidikan<br><span style="font-size:0.75rem;color:#94a3b8;">Nasional & Internasional</span></div></div>
         </div>
         <div class="map-visual">
+            <div class="map-image">
+                <div class="placeholder-icon">
+                    <i data-lucide="map"></i>
+                    <p>Peta Sebaran Institusi</p>
+                    <span>Letakkan gambar peta lokasi di sini (16:9)</span>
+                </div>
+            </div>
             <div class="map-dots">
                 <span class="map-dot"><i data-lucide="map-pin"></i> Malang</span>
                 <span class="map-dot"><i data-lucide="map-pin"></i> Surabaya</span>
