@@ -13,6 +13,9 @@ use App\Http\Controllers\StudentTryoutWhatsappController;
 Route::get('/demo', function () {
     return view('demo.login');
 });
+Route::post('/demo/login', function () {
+    return redirect('/demo/principal');
+});
 Route::get('/demo/principal', function () {
     return view('principal.demo');
 });

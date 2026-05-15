@@ -24,13 +24,19 @@
         .card h1 { font-size:1.75rem; font-weight:700; margin-bottom:0.5rem; }
         .card p { color:#94a3b8; font-size:0.9rem; margin-bottom:2.5rem; }
         .badge-demo { display:inline-flex; align-items:center; gap:0.5rem; background:rgba(5,150,105,0.15); color:#34d399; padding:0.4rem 1rem; border-radius:9999px; font-size:0.75rem; font-weight:700; margin-bottom:1.5rem; }
-        .btn-demo { display:block; width:100%; padding:1rem; background:#059669; color:white; border:none; border-radius:16px; font-size:1rem; font-weight:700; cursor:pointer; text-decoration:none; text-align:center; transition:all 0.3s; }
+        .form-group { margin-bottom:1.5rem; }
+        .form-group label { display:block; font-size:0.8rem; font-weight:600; color:#94a3b8; margin-bottom:0.5rem; text-transform:uppercase; letter-spacing:1px; }
+        .input-wrap { position:relative; }
+        .input-wrap i { position:absolute; left:1rem; top:50%; transform:translateY(-50%); color:#64748b; width:18px; }
+        .input-wrap input { width:100%; padding:1rem 1rem 1rem 3rem; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:16px; color:white; font-size:1rem; transition:all 0.3s; }
+        .input-wrap input:focus { outline:none; border-color:#4f46e5; background:rgba(79,70,229,0.1); box-shadow:0 0 0 4px rgba(79,70,229,0.1); }
+        .btn-demo { width:100%; padding:1rem; background:#059669; color:white; border:none; border-radius:16px; font-size:1rem; font-weight:700; cursor:pointer; text-decoration:none; display:flex; align-items:center; justify-content:center; gap:0.75rem; transition:all 0.3s; margin-top:0.5rem; }
         .btn-demo:hover { background:#10b981; transform:translateY(-2px); box-shadow:0 10px 20px -5px rgba(5,150,105,0.4); }
-        .btn-outline { display:block; width:100%; padding:0.85rem; background:transparent; color:#94a3b8; border:1px solid rgba(255,255,255,0.1); border-radius:16px; font-size:0.9rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; transition:all 0.3s; margin-top:1rem; }
-        .btn-outline:hover { border-color:#4f46e5; color:white; }
         .divider { display:flex; align-items:center; gap:1rem; margin:1.5rem 0; }
         .divider-line { flex:1; height:1px; background:rgba(255,255,255,0.1); }
         .divider-text { color:#64748b; font-size:0.75rem; font-weight:600; text-transform:uppercase; }
+        .btn-outline { display:block; width:100%; padding:0.85rem; background:transparent; color:#94a3b8; border:1px solid rgba(255,255,255,0.1); border-radius:16px; font-size:0.9rem; font-weight:600; cursor:pointer; text-decoration:none; text-align:center; transition:all 0.3s; }
+        .btn-outline:hover { border-color:#4f46e5; color:white; }
         @media (max-width:1024px) { .left { display:none; } }
     </style>
 </head>
@@ -49,11 +55,25 @@
     <div class="right">
         <div class="card">
             <div class="badge-demo"><i data-lucide="presentation" style="width:16px;"></i> Mode Demo</div>
-            <h1>Dashboard Kepala Sekolah</h1>
-            <p>Akses langsung simulasi dashboard tanpa login. Ideal untuk presentasi dan evaluasi.</p>
-            <a href="/demo/principal" class="btn-demo"><i data-lucide="eye" style="width:18px;vertical-align:middle;margin-right:0.5rem;"></i> Masuk Demo Sekarang</a>
+            <h1>Masuk ke Demo</h1>
+            <p>Masukkan username dan password apa saja untuk mengakses dashboard simulasi.</p>
+            <form action="/demo/login" method="POST">
+                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                <div class="form-group">
+                    <label>Username</label>
+                    <div class="input-wrap"><i data-lucide="user"></i><input type="text" name="username" placeholder="Masukkan username" required></div>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <div class="input-wrap"><i data-lucide="lock"></i><input type="password" name="password" placeholder="••••••••" required></div>
+                </div>
+                <button type="submit" class="btn-demo"><i data-lucide="log-in" style="width:18px;"></i> Masuk Demo</button>
+            </form>
             <div class="divider"><div class="divider-line"></div><span class="divider-text">atau</span><div class="divider-line"></div></div>
-            <a href="/login" class="btn-outline"><i data-lucide="arrow-left" style="width:16px;vertical-align:middle;margin-right:0.5rem;"></i> Kembali ke Login Utama</a>
+            <a href="/demo/principal" class="btn-outline" style="margin-top:0;"><i data-lucide="eye" style="width:16px;vertical-align:middle;margin-right:0.5rem;"></i> Langsung ke Dashboard</a>
+            <div style="margin-top:1.5rem; text-align:center;">
+                <a href="/login" style="color:#64748b;font-size:0.8rem;text-decoration:none;">&larr; Kembali ke Login Utama</a>
+            </div>
         </div>
     </div>
 </div>
