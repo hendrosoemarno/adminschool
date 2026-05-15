@@ -25,7 +25,7 @@ Route::get('/demo/principal/alert', function () { return view('principal.demo_al
 Route::get('/demo/principal/alert-groups', function () { return view('principal.demo_alert_groups'); });
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('landing');
 });
 
 Route::get('/login', [MoodleLoginController::class, 'showLoginForm'])->name('moodle.login');
