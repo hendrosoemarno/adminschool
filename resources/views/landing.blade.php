@@ -78,6 +78,7 @@
         .trusted-logos span { font-size:1rem; font-weight:700; color:#94a3b8; opacity:0.5; }
         .map-visual { margin:3rem auto 0; max-width:600px; position:relative; }
         .map-image { width:100%; aspect-ratio:16/9; border-radius:20px; background:linear-gradient(135deg,#f1f5f9,#e2e8f0); border:1px solid #e2e8f0; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative; }
+        .map-image img { width:100%; height:100%; object-fit:cover; }
         .map-image .placeholder-icon { color:#94a3b8; text-align:center; }
         .map-image .placeholder-icon i { width:48px; height:48px; color:#cbd5e1; }
         .map-image .placeholder-icon p { font-size:0.9rem; color:#94a3b8; margin-top:0.75rem; font-weight:600; }
@@ -226,11 +227,15 @@
         </div>
         <div class="map-visual">
             <div class="map-image">
-                <div class="placeholder-icon">
-                    <i data-lucide="map"></i>
-                    <p>Peta Sebaran Institusi</p>
-                    <span>Letakkan gambar peta lokasi di sini (16:9)</span>
-                </div>
+                @if(file_exists(public_path('images/peta-sebaran.png')))
+                    <img src="/images/peta-sebaran.png" alt="Peta Sebaran Institusi">
+                @else
+                    <div class="placeholder-icon">
+                        <i data-lucide="map"></i>
+                        <p>Peta Sebaran Institusi</p>
+                        <span>Letakkan gambar di <code style="font-size:0.75rem;">public/images/peta-sebaran.png</code></span>
+                    </div>
+                @endif
             </div>
         </div>
         <p style="color:#059669;font-weight:700;font-size:0.85rem;margin-top:2rem;"><i data-lucide="globe" style="width:16px;vertical-align:middle;margin-right:0.5rem;"></i> Sistem pemetaan yang diakui secara global oleh siswa lintas negara.</p>
