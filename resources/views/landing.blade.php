@@ -82,7 +82,7 @@
         .map-image .placeholder-icon i { width:48px; height:48px; color:#cbd5e1; }
         .map-image .placeholder-icon p { font-size:0.9rem; color:#94a3b8; margin-top:0.75rem; font-weight:600; }
         .map-image .placeholder-icon span { font-size:0.8rem; color:#cbd5e1; display:block; margin-top:0.25rem; }
-        .map-dots { display:flex; flex-wrap:wrap; justify-content:center; gap:1.5rem; margin-top:2rem; }
+        .map-dots { display:flex; flex-wrap:wrap; justify-content:center; gap:1.5rem; margin-top:1rem; }
         .map-dot { display:flex; align-items:center; gap:0.5rem; font-size:0.85rem; color:#475569; }
         .map-dot i { color:#059669; width:16px; }
 
@@ -231,15 +231,6 @@
                     <p>Peta Sebaran Institusi</p>
                     <span>Letakkan gambar peta lokasi di sini (16:9)</span>
                 </div>
-            </div>
-            <div class="map-dots">
-                <span class="map-dot"><i data-lucide="map-pin"></i> Malang</span>
-                <span class="map-dot"><i data-lucide="map-pin"></i> Surabaya</span>
-                <span class="map-dot"><i data-lucide="map-pin"></i> Jakarta</span>
-                <span class="map-dot"><i data-lucide="map-pin"></i> Balikpapan</span>
-                <span class="map-dot"><i data-lucide="map-pin"></i> Palembang</span>
-                <span class="map-dot"><i data-lucide="map-pin"></i> 🇯🇵 Jepang</span>
-                <span class="map-dot"><i data-lucide="map-pin"></i> 🇸🇦 Jeddah</span>
             </div>
         </div>
         <p style="color:#059669;font-weight:700;font-size:0.85rem;margin-top:2rem;"><i data-lucide="globe" style="width:16px;vertical-align:middle;margin-right:0.5rem;"></i> Sistem pemetaan yang diakui secara global oleh siswa lintas negara.</p>
