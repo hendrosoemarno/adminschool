@@ -207,19 +207,34 @@
 <!-- SOCIAL PROOF -->
 <section class="trusted-section">
     <div class="container">
-        <div class="section-label">— Kenapa Kami?</div>
-        <h2>Dipercaya Lebih dari <span class="highlight">200 Klien</span><br>& Berbasis <span class="highlight">Amanah</span></h2>
-        <p>Kami bukan sekadar vendor, kami adalah partner pertumbuhan sekolah Anda. Dengan pengalaman mengelola ratusan klien di bawah bendera AI Learning, kami membawa teknologi berstandar global dengan nilai-nilai lokal yang terpercaya.</p>
-        <div style="display:flex; justify-content:center; gap:4rem; flex-wrap:wrap; margin-bottom:3rem;">
-            <div><div class="trusted-number">200+</div><div class="trusted-label">Sekolah Mitra</div></div>
-            <div><div class="trusted-number">50K+</div><div class="trusted-label">Siswa Terdata</div></div>
-            <div><div class="trusted-number">98%</div><div class="trusted-label">Kepuasan Klien</div></div>
+        <div class="section-label">— Jangkauan &amp; Kepercayaan</div>
+        <h2>Standar Global untuk<br><span class="highlight">Masa Depan Pendidikan Indonesia</span></h2>
+        <p>Lebih dari 600 siswa telah mempercayakan pemetaan akademik mereka kepada kami. Dengan teknologi Top Exam, saat ini kami secara aktif mendampingi 200+ siswa yang berasal dari <strong>220+ institusi pendidikan</strong> — mulai dari sekolah unggulan nasional hingga sekolah internasional. Kami hadir memberikan data pemetaan yang akurat, menjadi kompas bagi sekolah dan orang tua dalam menuntun masa depan siswa.</p>
+        <div style="display:flex; justify-content:center; gap:4rem; flex-wrap:wrap; margin-bottom:2rem;">
+            <div><div class="trusted-number">600+</div><div class="trusted-label">Total Siswa Terfasilitasi</div></div>
+            <div><div class="trusted-number">200+</div><div class="trusted-label">Siswa Aktif Terpetakan</div></div>
+            <div><div class="trusted-number">220+</div><div class="trusted-label">Asal Institusi Pendidikan</div></div>
         </div>
-        <div class="trusted-logos">
-            <span>KEMDIKBUD</span>
-            <span>LPDP</span>
-            <span>SEAMEO</span>
-            <span>RUANG GURU</span>
+        <p style="color:#059669; font-weight:700; font-size:0.95rem; margin-bottom:1.5rem;">Sistem pemetaan yang diakui secara global oleh siswa lintas negara.</p>
+        <!-- Peta Sebaran -->
+        <div style="display:flex; justify-content:center; margin-bottom:2rem;">
+            <svg viewBox="0 0 400 180" style="width:100%; max-width:500px; height:auto;">
+                <path d="M30,120 Q50,90 80,80 Q110,70 140,75 Q160,78 180,70 Q200,62 230,55 Q260,48 280,52 Q300,56 320,50 Q340,44 360,48 Q370,50 375,55 L370,65 Q360,70 340,72 Q320,74 300,76 Q280,78 260,80 Q240,82 220,85 Q200,88 180,92 Q160,96 140,100 Q120,104 100,108 Q80,112 60,115 Q40,118 30,120 Z" fill="rgba(5,150,105,0.06)" stroke="rgba(5,150,105,0.2)" stroke-width="1"/>
+                <path d="M80,80 Q90,95 100,108 Q110,100 130,95 Q150,90 170,88 Q190,86 210,84 Q230,82 250,80 Q270,78 290,76 Q310,74 330,72 Q350,70 360,68 L365,58 Q345,52 320,54 Q295,56 270,58 Q245,60 220,62 Q195,64 170,68 Q145,72 120,76 Q100,78 80,80 Z" fill="rgba(5,150,105,0.04)" stroke="rgba(5,150,105,0.15)" stroke-width="0.5"/>
+                <circle cx="115" cy="105" r="4" fill="#059669" opacity="0.8"/><text x="115" y="120" text-anchor="middle" font-size="8" fill="#059669" font-weight="600">Malang</text>
+                <circle cx="145" cy="90" r="4" fill="#059669" opacity="0.8"/><text x="145" y="82" text-anchor="middle" font-size="8" fill="#059669" font-weight="600">Surabaya</text>
+                <circle cx="195" cy="72" r="4" fill="#059669" opacity="0.8"/><text x="195" y="64" text-anchor="middle" font-size="8" fill="#059669" font-weight="600">Jakarta</text>
+                <circle cx="210" cy="85" r="3" fill="#059669" opacity="0.6"/><text x="210" y="96" text-anchor="middle" font-size="7" fill="#64748b">Balikpapan</text>
+                <circle cx="255" cy="58" r="3" fill="#059669" opacity="0.6"/><text x="255" y="50" text-anchor="middle" font-size="7" fill="#64748b">Palembang</text>
+                <circle cx="330" cy="52" r="4" fill="#059669" opacity="0.8"/><text x="330" y="44" text-anchor="middle" font-size="8" fill="#059669" font-weight="600">Jepang</text>
+            </svg>
+        </div>
+        <div class="trusted-logos" style="margin-bottom:2rem;">
+            <span>SDIT PERMATA</span>
+            <span>AL-AZHAR</span>
+            <span>AL-WILDAN</span>
+            <span>LABSCHOOL</span>
+            <span>GLOBAL MANDIRI</span>
         </div>
     </div>
 </section>
