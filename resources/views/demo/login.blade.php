@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Demo | AI Learning Platform</title>
+    <title>Demo | Top Exam</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -46,7 +46,7 @@
         <div class="brand">
             <div class="logo">
                 <div class="logo-icon"><i data-lucide="brain-circuit" style="color:white;width:30px;height:30px;"></i></div>
-                <span class="brand-name">AI Learning</span>
+                <span class="brand-name">Top Exam</span>
             </div>
             <div class="tagline">Coba <span>Platform</span> Sekarang.</div>
             <p class="desc">Jelajahi semua fitur dashboard analitik tanpa perlu koneksi database. Data dummy sudah siap.</p>

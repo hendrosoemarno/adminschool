@@ -3,32 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Kepala Sekolah - AI Learning (Demo)</title>
+    <title>Dashboard Kepala Sekolah - Top Exam (Demo)</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         * { margin:0; padding:0; box-sizing:border-box; }
-        body { font-family:'Inter',sans-serif; background:#f1f5f9; color:#1e293b; }
-        .topbar { background:rgba(255,255,255,0.8); backdrop-filter:blur(12px); border-bottom:1px solid #e2e8f0; padding:1rem 2.5rem; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:50; }
+        :root { --bg-main:#f1f5f9; --bg-card:#ffffff; --text-main:#1e293b; --text-sub:#94a3b8; --border:#e2e8f0; --topbar-bg:rgba(255,255,255,0.8); }
+        .dark { --bg-main:#0f172a; --bg-card:#1e293b; --text-main:#f1f5f9; --text-sub:#94a3b8; --border:#334155; --topbar-bg:rgba(30,41,59,0.8); }
+        body { font-family:'Inter',sans-serif; background:var(--bg-main); color:var(--text-main); transition:background-color 0.3s ease; }
+        .topbar { background:var(--topbar-bg); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); padding:1rem 2.5rem; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:50; }
         .topbar h1 { font-size:1.25rem; font-weight:700; }
         .topbar .badge { background:#05966915; color:#059669; padding:0.3rem 0.8rem; border-radius:9999px; font-size:0.75rem; font-weight:700; }
+        .theme-toggle { width:40px; height:40px; border-radius:12px; background:var(--bg-card); border:1px solid var(--border); color:var(--text-main); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s; }
+        .theme-toggle:hover { background:var(--border); }
         .container { max-width:1400px; margin:0 auto; padding:2rem; }
-        .school-info { background:white; border-radius:20px; padding:1.5rem 2rem; margin-bottom:2rem; border-left:4px solid #4f46e5; display:flex; justify-content:space-between; align-items:center; }
+        .school-info { background:var(--bg-card); border-radius:20px; padding:1.5rem 2rem; margin-bottom:2rem; border-left:4px solid #4f46e5; display:flex; justify-content:space-between; align-items:center; }
         .school-info h2 { font-size:1.5rem; }
         .school-info .jenjang { background:#4f46e515; color:#4f46e5; padding:0.3rem 1rem; border-radius:9999px; font-size:0.8rem; font-weight:700; }
         .stats { display:grid; grid-template-columns:repeat(5,1fr); gap:1.5rem; margin-bottom:2rem; }
-        .stat-card { background:white; border-radius:20px; padding:1.5rem; cursor:pointer; transition:all 0.2s; text-decoration:none; display:block; color:inherit; }
+        .stat-card { background:var(--bg-card); border-radius:20px; padding:1.5rem; cursor:pointer; transition:all 0.2s; text-decoration:none; display:block; color:inherit; }
         .stat-card:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(0,0,0,0.08); }
-        .stat-card .label { font-size:0.7rem; font-weight:700; color:#94a3b8; text-transform:uppercase; margin-bottom:0.5rem; }
+        .stat-card .label { font-size:0.7rem; font-weight:700; color:var(--text-sub); text-transform:uppercase; margin-bottom:0.5rem; }
         .stat-card .value { font-size:2rem; font-weight:800; }
-        .stat-card .sub { font-size:0.75rem; color:#94a3b8; margin-top:0.5rem; }
+        .stat-card .sub { font-size:0.75rem; color:var(--text-sub); margin-top:0.5rem; }
         .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:2rem; margin-bottom:2rem; }
-        .card { background:white; border-radius:20px; padding:1.5rem; }
+        .card { background:var(--bg-card); border-radius:20px; padding:1.5rem; }
         .card h3 { font-size:1rem; font-weight:700; margin-bottom:1.25rem; }
         table { width:100%; border-collapse:collapse; font-size:0.85rem; }
-        th { text-align:left; padding:0.75rem 0.5rem; font-size:0.7rem; font-weight:700; color:#94a3b8; text-transform:uppercase; border-bottom:2px solid #e2e8f0; }
-        td { padding:0.75rem 0.5rem; border-bottom:1px solid #f1f5f9; }
+        th { text-align:left; padding:0.75rem 0.5rem; font-size:0.7rem; font-weight:700; color:var(--text-sub); text-transform:uppercase; border-bottom:2px solid var(--border); }
+        td { padding:0.75rem 0.5rem; border-bottom:1px solid var(--border); }
         .progress { width:60px; height:8px; background:#e2e8f0; border-radius:4px; overflow:hidden; margin:0 auto; }
         .progress-fill { height:100%; border-radius:4px; }
         .chart-container { position:relative; height:280px; }
@@ -46,10 +50,15 @@
         <div style="width:36px;height:36px;background:#4f46e5;border-radius:10px;display:flex;align-items:center;justify-content:center;color:white;">
             <i data-lucide="graduation-cap" style="width:20px;"></i>
         </div>
-        <h1>AI Learning <span style="color:#94a3b8;font-weight:400;">— Dashboard Kepsek</span></h1>
+        <h1>Top Exam <span style="color:#94a3b8;font-weight:400;">— Dashboard Kepsek</span></h1>
     </div>
     <div style="display:flex; align-items:center; gap:1rem;">
         <span class="badge">DEMO</span>
+        <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
+            <svg id="themeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+        </button>
         <a href="/login" style="color:#dc2626;font-size:0.8rem;font-weight:600;text-decoration:none;">Keluar</a>
     </div>
 </div>
@@ -70,7 +79,7 @@
     <div class="stats">
         <a href="/demo/principal/student-mastery" class="stat-card" style="border-left:4px solid #4f46e5;">
             <div class="label">Rata-rata Mastery</div>
-            <div class="value" style="color:#1e293b;">78.3</div>
+            <div class="value" style="color:var(--text-main);">78.3</div>
             <div class="sub">Skor rata-rata seluruh siswa</div>
         </a>
         <a href="/demo/principal/excellent" class="stat-card" style="border-left:4px solid #059669;">
@@ -138,6 +147,22 @@
 
 <script>
     lucide.createIcons();
+
+    // Dark mode toggle
+    (function() {
+        var themeBtn = document.getElementById('themeToggle');
+        var themeIcon = document.getElementById('themeIcon');
+        var html = document.documentElement;
+        const moonIcon = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+        const sunIcon  = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
+        function setTheme(isDark) {
+            if (isDark) { html.classList.add('dark'); themeIcon.innerHTML = sunIcon; }
+            else { html.classList.remove('dark'); themeIcon.innerHTML = moonIcon; }
+            try { localStorage.setItem('theme', isDark ? 'dark' : 'light'); } catch(e) {}
+        }
+        try { setTheme(localStorage.getItem('theme') === 'dark'); } catch(e) {}
+        themeBtn.onclick = function() { setTheme(!html.classList.contains('dark')); };
+    })();
 
     new Chart(document.getElementById('growthChart'), {
         type: 'line',
