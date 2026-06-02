@@ -3,7 +3,9 @@
 @section('title', 'Daftar Modul Ajar - Smart School')
 @section('page_header', 'Daftar Modul Ajar')
 @section('page_subtitle', 'Kelola dan akses seluruh modul ajar yang telah dibuat.')
-@section('breadcrumb', '<a href="/demo/smart-school/guru">Guru</a> / <a href="/demo/smart-school/guru/modul">Perangkat Ajar</a> / <span>Daftar Modul</span>')
+@section('breadcrumb')
+<a href="{{ url('/demo/smart-school/guru') }}">Guru</a> / <a href="{{ url('/demo/smart-school/guru/modul') }}">Perangkat Ajar</a> / <span>Daftar Modul</span>
+@endsection
 
 @section('styles')
 <style>

@@ -3,7 +3,9 @@
 @section('title', 'Smart Remedial - Smart School')
 @section('page_header', 'Smart Remedial')
 @section('page_subtitle', 'Siswa dengan nilai di bawah KKM (70) otomatis terfilter untuk tindak lanjut.')
-@section('breadcrumb', '<a href="/demo/smart-school/guru">Guru</a> / <a href="/demo/smart-school/guru/remedial">Administrasi</a> / <span>Smart Remedial</span>')
+@section('breadcrumb')
+<a href="{{ url('/demo/smart-school/guru') }}">Guru</a> / <a href="{{ url('/demo/smart-school/guru/remedial') }}">Administrasi</a> / <span>Smart Remedial</span>
+@endsection
 
 @section('styles')
 <style>

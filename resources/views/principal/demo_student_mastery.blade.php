@@ -18,5 +18,5 @@
         </tbody>
     </table></div>
 </div>
-<div style="margin-top:2rem;"><a href="/demo/principal" class="text-indigo-600 font-bold text-sm" style="text-decoration:none;">&larr; Kembali ke Dashboard</a></div>
+<div style="margin-top:2rem;"><a href="{{ url('/demo/principal') }}" class="text-indigo-600 font-bold text-sm" style="text-decoration:none;">&larr; Kembali ke Dashboard</a></div>
 @endsection

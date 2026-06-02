@@ -3,7 +3,9 @@
 @section('title', 'Asesmen & Nilai - Smart School')
 @section('page_header', 'Asesmen & Nilai')
 @section('page_subtitle', 'Input dan kelola nilai asesmen siswa per topik.')
-@section('breadcrumb', '<a href="/demo/smart-school/guru">Guru</a> / <a href="/demo/smart-school/guru/asesmen">Administrasi</a> / <span>Asesmen & Nilai</span>')
+@section('breadcrumb')
+<a href="{{ url('/demo/smart-school/guru') }}">Guru</a> / <a href="{{ url('/demo/smart-school/guru/asesmen') }}">Administrasi</a> / <span>Asesmen & Nilai</span>
+@endsection
 
 @section('styles')
 <style>

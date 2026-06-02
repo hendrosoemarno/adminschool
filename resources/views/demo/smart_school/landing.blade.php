@@ -17,7 +17,7 @@
     @media (max-width:1024px) { .role-grid { grid-template-columns:1fr; } }
 </style>
 <div class="role-grid">
-    <a href="/demo/smart-school/guru" class="role-card">
+    <a href="{{ url('/demo/smart-school/guru') }}" class="role-card">
         <div class="role-icon" style="background:#4f46e515;color:#4f46e5;"><i data-lucide="graduation-cap" style="width:36px;height:36px;"></i></div>
         <h3>Masuk sebagai Guru</h3>
         <p>Kelola perangkat ajar, asesmen, jurnal harian, presensi, dan cetak rapor.</p>
@@ -29,7 +29,7 @@
             <li><i data-lucide="check"></i> Cetak Rapor Massal</li>
         </ul>
     </a>
-    <a href="/demo/smart-school/kepsek" class="role-card">
+    <a href="{{ url('/demo/smart-school/kepsek') }}" class="role-card">
         <div class="role-icon" style="background:#05966915;color:#059669;"><i data-lucide="briefcase" style="width:36px;height:36px;"></i></div>
         <h3>Masuk sebagai Kepala Sekolah</h3>
         <p>Pantau kepatuhan guru, analisis performa siswa, dan supervisi akademik real-time.</p>
@@ -40,7 +40,7 @@
             <li><i data-lucide="check"></i> Export Laporan Sekolah</li>
         </ul>
     </a>
-    <a href="/demo/smart-school/admin" class="role-card">
+    <a href="{{ url('/demo/smart-school/admin') }}" class="role-card">
         <div class="role-icon" style="background:#d9770615;color:#d97706;"><i data-lucide="shield" style="width:36px;height:36px;"></i></div>
         <h3>Masuk sebagai Admin</h3>
         <p>Atur pengguna, konfigurasi sistem, dan pantau aktivitas aplikasi.</p>

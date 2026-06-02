@@ -4,7 +4,7 @@
 @section('page_header', 'Smart Mapping')
 @section('page_subtitle', 'Analisis performa akademik dan pemetaan ATP')
 @section('breadcrumb')
-<a href="/demo/smart-school/kepsek">Kepsek</a> / <a href="/demo/smart-school/kepsek/smart-mapping">Monitoring</a> / <span>Smart Mapping</span>
+<a href="{{ url('/demo/smart-school/kepsek') }}">Kepsek</a> / <a href="{{ url('/demo/smart-school/kepsek/smart-mapping') }}">Monitoring</a> / <span>Smart Mapping</span>
 @endsection
 
 @section('content')

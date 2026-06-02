@@ -59,7 +59,7 @@
                 <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
             </svg>
         </button>
-        <a href="/login" style="color:#dc2626;font-size:0.8rem;font-weight:600;text-decoration:none;">Keluar</a>
+        <a href="{{ url('/login') }}" style="color:#dc2626;font-size:0.8rem;font-weight:600;text-decoration:none;">Keluar</a>
     </div>
 </div>
 
@@ -77,22 +77,22 @@
 
     <!-- Stats -->
     <div class="stats">
-        <a href="/demo/smp/principal/student-mastery" class="stat-card" style="border-left:4px solid #4f46e5;">
+        <a href="{{ url('/demo/smp/principal/student-mastery') }}" class="stat-card" style="border-left:4px solid #4f46e5;">
             <div class="label">Rata-rata Mastery</div>
             <div class="value" style="color:var(--text-main);">78.3</div>
             <div class="sub">Skor rata-rata seluruh siswa</div>
         </a>
-        <a href="/demo/smp/principal/excellent" class="stat-card" style="border-left:4px solid #059669;">
+        <a href="{{ url('/demo/smp/principal/excellent') }}" class="stat-card" style="border-left:4px solid #059669;">
             <div class="label">Excellent Rate</div>
             <div class="value" style="color:#059669;">64%</div>
             <div class="sub">23 siswa di atas target (75)</div>
         </a>
-        <a href="/demo/smp/principal/alert" class="stat-card" style="border-left:4px solid #dc2626;">
+        <a href="{{ url('/demo/smp/principal/alert') }}" class="stat-card" style="border-left:4px solid #dc2626;">
             <div class="label">Alert Rate</div>
             <div class="value" style="color:#dc2626;">22%</div>
             <div class="sub">8 siswa di bawah KKM (70)</div>
         </a>
-        <a href="/demo/smp/principal/alert-groups" class="stat-card" style="border-left:4px solid #dc2626;">
+        <a href="{{ url('/demo/smp/principal/alert-groups') }}" class="stat-card" style="border-left:4px solid #dc2626;">
             <div class="label">Kelompok Alert</div>
             <div class="value" style="color:#dc2626;">12 <span style="font-size:0.85rem;font-weight:400;color:#94a3b8;">Kelompok</span></div>
             <div class="sub">Topik dengan siswa di bawah KKM</div>

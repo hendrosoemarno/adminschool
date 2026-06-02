@@ -3,7 +3,9 @@
 @section('title', 'Dashboard Guru - Smart School')
 @section('page_header', 'Dashboard Guru')
 @section('page_subtitle', 'Selamat datang, Bapak/Ibu Guru — kelola aktivitas pembelajaran Anda di sini.')
-@section('breadcrumb', '<a href="/demo/smart-school/guru">Guru</a> / <span>Dashboard</span>')
+@section('breadcrumb')
+<a href="{{ url('/demo/smart-school/guru') }}">Guru</a> / <span>Dashboard</span>
+@endsection
 
 @section('styles')
 <style>

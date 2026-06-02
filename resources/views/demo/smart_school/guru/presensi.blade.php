@@ -3,7 +3,9 @@
 @section('title', 'Presensi Siswa - Smart School')
 @section('page_header', 'Presensi Siswa')
 @section('page_subtitle', 'Catat kehadiran siswa harian dengan cepat.')
-@section('breadcrumb', '<a href="/demo/smart-school/guru">Guru</a> / <a href="/demo/smart-school/guru/presensi">Administrasi</a> / <span>Presensi</span>')
+@section('breadcrumb')
+<a href="{{ url('/demo/smart-school/guru') }}">Guru</a> / <a href="{{ url('/demo/smart-school/guru/presensi') }}">Administrasi</a> / <span>Presensi</span>
+@endsection
 
 @section('styles')
 <style>

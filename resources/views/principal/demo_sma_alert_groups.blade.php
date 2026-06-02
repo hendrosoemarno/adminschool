@@ -83,5 +83,5 @@ $subjKeys = array_keys($subjects);
 </div>
 @endif
 @endforeach
-<div style="margin-top:2rem;"><a href="/demo/sma/principal" style="color:#4f46e5;font-weight:700;font-size:0.875rem;text-decoration:none;">&larr; Kembali ke Dashboard</a></div>
+<div style="margin-top:2rem;"><a href="{{ url('/demo/sma/principal') }}" style="color:#4f46e5;font-weight:700;font-size:0.875rem;text-decoration:none;">&larr; Kembali ke Dashboard</a></div>
 @endsection

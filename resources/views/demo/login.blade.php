@@ -57,7 +57,7 @@
             <div class="badge-demo"><i data-lucide="presentation" style="width:16px;"></i> Mode Demo</div>
             <h1>Masuk ke Demo</h1>
             <p>Masukkan username dan password apa saja untuk mengakses dashboard simulasi.</p>
-            <form action="/demo/login" method="POST">
+            <form action="{{ url('/demo/login') }}" method="POST">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <div class="form-group">
                     <label>Username</label>
@@ -71,12 +71,12 @@
             </form>
             <div class="divider"><div class="divider-line"></div><span class="divider-text">pilih jenjang</span><div class="divider-line"></div></div>
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.75rem;margin-bottom:1.5rem;">
-                <a href="/demo/principal" class="btn-outline" style="padding:0.75rem;"><i data-lucide="school" style="width:16px;vertical-align:middle;margin-right:0.5rem;"></i> SD</a>
-                <a href="/demo/smp/principal" class="btn-outline" style="padding:0.75rem;"><i data-lucide="book-open" style="width:16px;vertical-align:middle;margin-right:0.5rem;"></i> SMP</a>
-                <a href="/demo/sma/principal" class="btn-outline" style="padding:0.75rem;"><i data-lucide="graduation-cap" style="width:16px;vertical-align:middle;margin-right:0.5rem;"></i> SMA</a>
+                <a href="{{ url('/demo/principal') }}" class="btn-outline" style="padding:0.75rem;"><i data-lucide="school" style="width:16px;vertical-align:middle;margin-right:0.5rem;"></i> SD</a>
+                <a href="{{ url('/demo/smp/principal') }}" class="btn-outline" style="padding:0.75rem;"><i data-lucide="book-open" style="width:16px;vertical-align:middle;margin-right:0.5rem;"></i> SMP</a>
+                <a href="{{ url('/demo/sma/principal') }}" class="btn-outline" style="padding:0.75rem;"><i data-lucide="graduation-cap" style="width:16px;vertical-align:middle;margin-right:0.5rem;"></i> SMA</a>
             </div>
             <div class="divider"><div class="divider-line"></div><span class="divider-text">aplikasi sekolah</span><div class="divider-line"></div></div>
-            <a href="/demo/smart-school" class="btn-outline" style="margin-top:0;"><i data-lucide="building" style="width:16px;vertical-align:middle;margin-right:0.5rem;"></i> Smart School</a>
+            <a href="{{ url('/demo/smart-school') }}" class="btn-outline" style="margin-top:0;"><i data-lucide="building" style="width:16px;vertical-align:middle;margin-right:0.5rem;"></i> Smart School</a>
             <div style="margin-top:1.5rem; text-align:center;">
                 <a href="/login" style="color:#64748b;font-size:0.8rem;text-decoration:none;">&larr; Kembali ke Login Utama</a>
             </div>

@@ -3,7 +3,9 @@
 @section('title', 'Editor Modul - Smart School')
 @section('page_header', 'Editor Modul')
 @section('page_subtitle', 'Buat dan edit modul ajar dengan mudah.')
-@section('breadcrumb', '<a href="/demo/smart-school/guru">Guru</a> / <a href="/demo/smart-school/guru/modul">Perangkat Ajar</a> / <span>Editor Modul</span>')
+@section('breadcrumb')
+<a href="{{ url('/demo/smart-school/guru') }}">Guru</a> / <a href="{{ url('/demo/smart-school/guru/modul') }}">Perangkat Ajar</a> / <span>Editor Modul</span>
+@endsection
 
 @section('styles')
 <style>

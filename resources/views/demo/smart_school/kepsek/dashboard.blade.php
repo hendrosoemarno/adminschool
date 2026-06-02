@@ -4,7 +4,7 @@
 @section('page_header', 'Dashboard Supervisi')
 @section('page_subtitle', 'Pantau kinerja guru dan kepatuhan secara real-time')
 @section('breadcrumb')
-<a href="/demo/smart-school/kepsek">Kepsek</a> / <span>Dashboard Supervisi</span>
+<a href="{{ url('/demo/smart-school/kepsek') }}">Kepsek</a> / <span>Dashboard Supervisi</span>
 @endsection
 
 @section('content')

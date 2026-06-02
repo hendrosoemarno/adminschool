@@ -4,7 +4,7 @@
 @section('page_header', 'Export Laporan')
 @section('page_subtitle', 'Unduh laporan dalam format Excel atau PDF')
 @section('breadcrumb')
-<a href="/demo/smart-school/kepsek">Kepsek</a> / <a href="/demo/smart-school/kepsek/export">Dokumen</a> / <span>Export Laporan</span>
+<a href="{{ url('/demo/smart-school/kepsek') }}">Kepsek</a> / <a href="{{ url('/demo/smart-school/kepsek/export') }}">Dokumen</a> / <span>Export Laporan</span>
 @endsection
 
 @section('content')

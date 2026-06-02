@@ -109,7 +109,7 @@
 
 <nav>
     <a href="/" class="logo"><div class="logo-icon"><i data-lucide="graduation-cap" style="width:22px;"></i></div>Top Exam</a>
-    <a href="/login" class="nav-cta">Masuk</a>
+    <a href="{{ url('/login') }}" class="nav-cta">Masuk</a>
 </nav>
 
 <!-- HERO -->
@@ -118,7 +118,7 @@
     <h1>Ubah Data Nilai Menjadi<br><span>Strategi Kesuksesan Siswa.</span></h1>
     <p class="subheadline">Top Exam: Bukan Sekadar Try Out, Tapi Peta Jalan Menuju Prestasi.</p>
     <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
-        <a href="/demo" class="btn-primary"><i data-lucide="play-circle" style="width:20px;"></i> Lihat Demo Dashboard</a>
+        <a href="{{ url('/demo') }}" class="btn-primary"><i data-lucide="play-circle" style="width:20px;"></i> Lihat Demo Dashboard</a>
         <a href="#produk" class="btn-outline">Pelajari Lebih Lanjut</a>
     </div>
     <div class="hero-visual">
@@ -246,11 +246,11 @@
 <div style="text-align:center; padding:5rem 2rem; background:#fff;">
     <h2 style="font-size:2.2rem;font-weight:800;margin-bottom:1rem;">Siap bertransformasi?</h2>
     <p style="color:#64748b;max-width:500px;margin:0 auto 2.5rem;font-size:1.05rem;">Jadwalkan demo langsung dan lihat bagaimana platform ini bisa merevolusi cara sekolah Anda mengevaluasi kompetensi siswa.</p>
-    <a href="/demo" class="btn-primary"><i data-lucide="calendar" style="width:20px;"></i> Jadwalkan Demo Sekarang</a>
+    <a href="{{ url('/demo') }}" class="btn-primary"><i data-lucide="calendar" style="width:20px;"></i> Jadwalkan Demo Sekarang</a>
 </div>
 
 <footer>
-    <a href="/" class="logo"><div class="logo-icon"><i data-lucide="graduation-cap" style="width:18px;"></i></div>Top Exam</a>
+    <a href="{{ url('/') }}" class="logo"><div class="logo-icon"><i data-lucide="graduation-cap" style="width:18px;"></i></div>Top Exam</a>
     <p>&copy; 2026 Top Exam — AI Learning Architecture. All rights reserved.</p>
     <div class="siplah">
         <i data-lucide="shield-check" style="width:16px;"></i> Transaksi resmi & aman melalui <strong>SIPLah</strong>

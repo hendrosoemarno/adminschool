@@ -3,7 +3,9 @@
 @section('title', 'Download Center - Smart School')
 @section('page_header', 'Download Center')
 @section('page_subtitle', 'Unduh template perangkat ajar siap pakai.')
-@section('breadcrumb', '<a href="/demo/smart-school/guru">Guru</a> / <a href="/demo/smart-school/guru/modul">Perangkat Ajar</a> / <span>Download Center</span>')
+@section('breadcrumb')
+<a href="{{ url('/demo/smart-school/guru') }}">Guru</a> / <a href="{{ url('/demo/smart-school/guru/modul') }}">Perangkat Ajar</a> / <span>Download Center</span>
+@endsection
 
 @section('styles')
 <style>

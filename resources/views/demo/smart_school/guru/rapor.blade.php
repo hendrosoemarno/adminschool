@@ -3,7 +3,9 @@
 @section('title', 'Cetak Rapor - Smart School')
 @section('page_header', 'Cetak Rapor')
 @section('page_subtitle', 'Preview dan cetak rapor siswa per semester.')
-@section('breadcrumb', '<a href="/demo/smart-school/guru">Guru</a> / <a href="/demo/smart-school/guru/rapor">Laporan</a> / <span>Cetak Rapor</span>')
+@section('breadcrumb')
+<a href="{{ url('/demo/smart-school/guru') }}">Guru</a> / <a href="{{ url('/demo/smart-school/guru/rapor') }}">Laporan</a> / <span>Cetak Rapor</span>
+@endsection
 
 @section('styles')
 <style>

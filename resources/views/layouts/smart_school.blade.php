@@ -106,48 +106,48 @@
             <svg id="toggleSvg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
         </button>
         <div class="sidebar-panel" id="sidebarPanel">
-            <a href="/demo/smart-school" class="brand-f">SMART SCHOOL</a>
-            <a href="/demo/smart-school" class="brand-s">SS</a>
+            <a href="{{ url('/demo/smart-school') }}" class="brand-f">SMART SCHOOL</a>
+            <a href="{{ url('/demo/smart-school') }}" class="brand-s">SS</a>
             <nav style="display:flex;flex-direction:column;gap:0.2rem;flex:1;overflow-y:auto;">
             @if($smartRole === 'guru')
                 <span class="nav-lbl">Guru</span>
-                <a href="/demo/smart-school/guru" class="s-link {{ $isActive('demo/smart-school/guru') }}"><i data-lucide="layout-dashboard" style="width:18px;"></i><span class="t">Dashboard</span></a>
+                <a href="{{ url('/demo/smart-school/guru') }}" class="s-link {{ $isActive('demo/smart-school/guru') }}"><i data-lucide="layout-dashboard" style="width:18px;"></i><span class="t">Dashboard</span></a>
                 <span class="nav-lbl" style="margin-top:0.5rem;">Perangkat Ajar</span>
-                <a href="/demo/smart-school/guru/modul" class="s-link {{ $isActive('demo/smart-school/guru/modul') }}"><i data-lucide="book-open" style="width:18px;"></i><span class="t">Daftar Modul</span></a>
-                <a href="/demo/smart-school/guru/modul/editor" class="s-link {{ $isActive('demo/smart-school/guru/modul/editor') }}"><i data-lucide="edit" style="width:18px;"></i><span class="t">Editor Modul</span></a>
-                <a href="/demo/smart-school/guru/modul/download" class="s-link {{ $isActive('demo/smart-school/guru/modul/download') }}"><i data-lucide="download" style="width:18px;"></i><span class="t">Download Center</span></a>
+                <a href="{{ url('/demo/smart-school/guru/modul') }}" class="s-link {{ $isActive('demo/smart-school/guru/modul') }}"><i data-lucide="book-open" style="width:18px;"></i><span class="t">Daftar Modul</span></a>
+                <a href="{{ url('/demo/smart-school/guru/modul/editor') }}" class="s-link {{ $isActive('demo/smart-school/guru/modul/editor') }}"><i data-lucide="edit" style="width:18px;"></i><span class="t">Editor Modul</span></a>
+                <a href="{{ url('/demo/smart-school/guru/modul/download') }}" class="s-link {{ $isActive('demo/smart-school/guru/modul/download') }}"><i data-lucide="download" style="width:18px;"></i><span class="t">Download Center</span></a>
                 <span class="nav-lbl" style="margin-top:0.5rem;">Administrasi</span>
-                <a href="/demo/smart-school/guru/asesmen" class="s-link {{ $isActive('demo/smart-school/guru/asesmen') }}"><i data-lucide="clipboard-list" style="width:18px;"></i><span class="t">Asesmen & Nilai</span></a>
-                <a href="/demo/smart-school/guru/narasi" class="s-link {{ $isActive('demo/smart-school/guru/narasi') }}"><i data-lucide="file-text" style="width:18px;"></i><span class="t">Generator Narasi</span></a>
-                <a href="/demo/smart-school/guru/jurnal" class="s-link {{ $isActive('demo/smart-school/guru/jurnal') }}"><i data-lucide="book" style="width:18px;"></i><span class="t">Jurnal Harian</span></a>
-                <a href="/demo/smart-school/guru/presensi" class="s-link {{ $isActive('demo/smart-school/guru/presensi') }}"><i data-lucide="users" style="width:18px;"></i><span class="t">Presensi</span></a>
-                <a href="/demo/smart-school/guru/remedial" class="s-link {{ $isActive('demo/smart-school/guru/remedial') }}"><i data-lucide="alert-triangle" style="width:18px;"></i><span class="t">Smart Remedial</span></a>
+                <a href="{{ url('/demo/smart-school/guru/asesmen') }}" class="s-link {{ $isActive('demo/smart-school/guru/asesmen') }}"><i data-lucide="clipboard-list" style="width:18px;"></i><span class="t">Asesmen & Nilai</span></a>
+                <a href="{{ url('/demo/smart-school/guru/narasi') }}" class="s-link {{ $isActive('demo/smart-school/guru/narasi') }}"><i data-lucide="file-text" style="width:18px;"></i><span class="t">Generator Narasi</span></a>
+                <a href="{{ url('/demo/smart-school/guru/jurnal') }}" class="s-link {{ $isActive('demo/smart-school/guru/jurnal') }}"><i data-lucide="book" style="width:18px;"></i><span class="t">Jurnal Harian</span></a>
+                <a href="{{ url('/demo/smart-school/guru/presensi') }}" class="s-link {{ $isActive('demo/smart-school/guru/presensi') }}"><i data-lucide="users" style="width:18px;"></i><span class="t">Presensi</span></a>
+                <a href="{{ url('/demo/smart-school/guru/remedial') }}" class="s-link {{ $isActive('demo/smart-school/guru/remedial') }}"><i data-lucide="alert-triangle" style="width:18px;"></i><span class="t">Smart Remedial</span></a>
                 <span class="nav-lbl" style="margin-top:0.5rem;">Laporan</span>
-                <a href="/demo/smart-school/guru/rapor" class="s-link {{ $isActive('demo/smart-school/guru/rapor') }}"><i data-lucide="file-text" style="width:18px;"></i><span class="t">Cetak Rapor</span></a>
+                <a href="{{ url('/demo/smart-school/guru/rapor') }}" class="s-link {{ $isActive('demo/smart-school/guru/rapor') }}"><i data-lucide="file-text" style="width:18px;"></i><span class="t">Cetak Rapor</span></a>
             @elseif($smartRole === 'kepsek')
                 <span class="nav-lbl">Kepala Sekolah</span>
-                <a href="/demo/smart-school/kepsek" class="s-link {{ $isActive('demo/smart-school/kepsek') }}"><i data-lucide="layout-dashboard" style="width:18px;"></i><span class="t">Dashboard Supervisi</span></a>
+                <a href="{{ url('/demo/smart-school/kepsek') }}" class="s-link {{ $isActive('demo/smart-school/kepsek') }}"><i data-lucide="layout-dashboard" style="width:18px;"></i><span class="t">Dashboard Supervisi</span></a>
                 <span class="nav-lbl" style="margin-top:0.5rem;">Monitoring</span>
-                <a href="/demo/smart-school/kepsek/smart-mapping" class="s-link {{ $isActive('demo/smart-school/kepsek/smart-mapping') }}"><i data-lucide="bar-chart-3" style="width:18px;"></i><span class="t">Smart Mapping</span></a>
-                <a href="/demo/smart-school/kepsek/supervisi-jurnal" class="s-link {{ $isActive('demo/smart-school/kepsek/supervisi-jurnal') }}"><i data-lucide="activity" style="width:18px;"></i><span class="t">Supervisi Jurnal</span></a>
+                <a href="{{ url('/demo/smart-school/kepsek/smart-mapping') }}" class="s-link {{ $isActive('demo/smart-school/kepsek/smart-mapping') }}"><i data-lucide="bar-chart-3" style="width:18px;"></i><span class="t">Smart Mapping</span></a>
+                <a href="{{ url('/demo/smart-school/kepsek/supervisi-jurnal') }}" class="s-link {{ $isActive('demo/smart-school/kepsek/supervisi-jurnal') }}"><i data-lucide="activity" style="width:18px;"></i><span class="t">Supervisi Jurnal</span></a>
                 <span class="nav-lbl" style="margin-top:0.5rem;">Dokumen</span>
-                <a href="/demo/smart-school/kepsek/export" class="s-link {{ $isActive('demo/smart-school/kepsek/export') }}"><i data-lucide="download" style="width:18px;"></i><span class="t">Export Laporan</span></a>
+                <a href="{{ url('/demo/smart-school/kepsek/export') }}" class="s-link {{ $isActive('demo/smart-school/kepsek/export') }}"><i data-lucide="download" style="width:18px;"></i><span class="t">Export Laporan</span></a>
             @elseif($smartRole === 'admin')
                 <span class="nav-lbl">Administrator</span>
-                <a href="/demo/smart-school/admin" class="s-link {{ $isActive('demo/smart-school/admin') }}"><i data-lucide="users" style="width:18px;"></i><span class="t">Manajemen Pengguna</span></a>
-                <a href="/demo/smart-school/admin/konfigurasi" class="s-link {{ $isActive('demo/smart-school/admin/konfigurasi') }}"><i data-lucide="settings" style="width:18px;"></i><span class="t">Konfigurasi Sistem</span></a>
-                <a href="/demo/smart-school/admin/log" class="s-link {{ $isActive('demo/smart-school/admin/log') }}"><i data-lucide="activity" style="width:18px;"></i><span class="t">Log Sistem</span></a>
+                <a href="{{ url('/demo/smart-school/admin') }}" class="s-link {{ $isActive('demo/smart-school/admin') }}"><i data-lucide="users" style="width:18px;"></i><span class="t">Manajemen Pengguna</span></a>
+                <a href="{{ url('/demo/smart-school/admin/konfigurasi') }}" class="s-link {{ $isActive('demo/smart-school/admin/konfigurasi') }}"><i data-lucide="settings" style="width:18px;"></i><span class="t">Konfigurasi Sistem</span></a>
+                <a href="{{ url('/demo/smart-school/admin/log') }}" class="s-link {{ $isActive('demo/smart-school/admin/log') }}"><i data-lucide="activity" style="width:18px;"></i><span class="t">Log Sistem</span></a>
             @endif
             </nav>
             <div class="s-foot">
-                <a href="/demo/smart-school" class="s-link"><i data-lucide="arrow-left" style="width:18px;"></i><span class="t">Pilih Role</span></a>
+                <a href="{{ url('/demo/smart-school') }}" class="s-link"><i data-lucide="arrow-left" style="width:18px;"></i><span class="t">Pilih Role</span></a>
             </div>
         </div>
     </div>
     <main class="main-area">
         <div class="top-bar" style="background:var(--glass-bg);border-color:var(--glass-border);">
             <div>
-                <div class="breadcrumb"><a href="/demo/smart-school">Smart School</a> @hasSection('breadcrumb') / @yield('breadcrumb') @endif</div>
+                <div class="breadcrumb"><a href="{{ url('/demo/smart-school') }}">Smart School</a> @hasSection('breadcrumb') / @yield('breadcrumb') @endif</div>
                 <h2>@yield('page_header')</h2>
                 <p>@yield('page_subtitle')</p>
             </div>
@@ -155,7 +155,7 @@
                 <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
                     <svg id="themeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
                 </button>
-                <a href="/demo" class="btn-outline-sm" style="text-decoration:none;">&larr; Keluar</a>
+                <a href="{{ url('/demo') }}" class="btn-outline-sm" style="text-decoration:none;">&larr; Keluar</a>
             </div>
         </div>
         @yield('content')

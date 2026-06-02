@@ -3,7 +3,9 @@
 @section('title', 'Generator Narasi Rapor - Smart School')
 @section('page_header', 'Generator Narasi Rapor')
 @section('page_subtitle', 'Buat narasi rapor otomatis berdasarkan nilai asesmen siswa.')
-@section('breadcrumb', '<a href="/demo/smart-school/guru">Guru</a> / <a href="/demo/smart-school/guru/narasi">Administrasi</a> / <span>Generator Narasi</span>')
+@section('breadcrumb')
+<a href="{{ url('/demo/smart-school/guru') }}">Guru</a> / <a href="{{ url('/demo/smart-school/guru/narasi') }}">Administrasi</a> / <span>Generator Narasi</span>
+@endsection
 
 @section('styles')
 <style>

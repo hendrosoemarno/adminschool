@@ -3,7 +3,9 @@
 @section('title', 'Jurnal Harian - Smart School')
 @section('page_header', 'Jurnal Harian')
 @section('page_subtitle', 'Catat aktivitas pembelajaran harian Anda.')
-@section('breadcrumb', '<a href="/demo/smart-school/guru">Guru</a> / <a href="/demo/smart-school/guru/jurnal">Administrasi</a> / <span>Jurnal Harian</span>')
+@section('breadcrumb')
+<a href="{{ url('/demo/smart-school/guru') }}">Guru</a> / <a href="{{ url('/demo/smart-school/guru/jurnal') }}">Administrasi</a> / <span>Jurnal Harian</span>
+@endsection
 
 @section('styles')
 <style>

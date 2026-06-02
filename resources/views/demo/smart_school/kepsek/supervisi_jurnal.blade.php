@@ -4,7 +4,7 @@
 @section('page_header', 'Supervisi Jurnal')
 @section('page_subtitle', 'Monitoring jurnal harian dan presensi guru')
 @section('breadcrumb')
-<a href="/demo/smart-school/kepsek">Kepsek</a> / <a href="/demo/smart-school/kepsek/supervisi-jurnal">Monitoring</a> / <span>Supervisi Jurnal</span>
+<a href="{{ url('/demo/smart-school/kepsek') }}">Kepsek</a> / <a href="{{ url('/demo/smart-school/kepsek/supervisi-jurnal') }}">Monitoring</a> / <span>Supervisi Jurnal</span>
 @endsection
 
 @section('content')
