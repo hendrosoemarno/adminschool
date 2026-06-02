@@ -24,6 +24,47 @@ Route::get('/demo/principal/excellent', function () { return view('principal.dem
 Route::get('/demo/principal/alert', function () { return view('principal.demo_alert'); });
 Route::get('/demo/principal/alert-groups', function () { return view('principal.demo_alert_groups'); });
 
+Route::get('/demo/smp/principal', function () {
+    return view('principal.demo_smp');
+});
+Route::get('/demo/smp/principal/student-mastery', function () { return view('principal.demo_smp_student_mastery'); });
+Route::get('/demo/smp/principal/excellent', function () { return view('principal.demo_smp_excellent'); });
+Route::get('/demo/smp/principal/alert', function () { return view('principal.demo_smp_alert'); });
+Route::get('/demo/smp/principal/alert-groups', function () { return view('principal.demo_smp_alert_groups'); });
+
+Route::get('/demo/sma/principal', function () {
+    return view('principal.demo_sma');
+});
+Route::get('/demo/sma/principal/student-mastery', function () { return view('principal.demo_sma_student_mastery'); });
+Route::get('/demo/sma/principal/excellent', function () { return view('principal.demo_sma_excellent'); });
+Route::get('/demo/sma/principal/alert', function () { return view('principal.demo_sma_alert'); });
+Route::get('/demo/sma/principal/alert-groups', function () { return view('principal.demo_sma_alert_groups'); });
+
+// Smart School Demo Routes
+Route::prefix('demo/smart-school')->group(function () {
+    Route::get('/', function () { return view('demo.smart_school.landing'); });
+    // Guru
+    Route::get('/guru', function () { return view('demo.smart_school.guru.dashboard'); });
+    Route::get('/guru/modul', function () { return view('demo.smart_school.guru.modul_list'); });
+    Route::get('/guru/modul/editor', function () { return view('demo.smart_school.guru.modul_editor'); });
+    Route::get('/guru/modul/download', function () { return view('demo.smart_school.guru.modul_download'); });
+    Route::get('/guru/asesmen', function () { return view('demo.smart_school.guru.asesmen'); });
+    Route::get('/guru/narasi', function () { return view('demo.smart_school.guru.narasi'); });
+    Route::get('/guru/jurnal', function () { return view('demo.smart_school.guru.jurnal'); });
+    Route::get('/guru/presensi', function () { return view('demo.smart_school.guru.presensi'); });
+    Route::get('/guru/remedial', function () { return view('demo.smart_school.guru.remedial'); });
+    Route::get('/guru/rapor', function () { return view('demo.smart_school.guru.rapor'); });
+    // Kepsek
+    Route::get('/kepsek', function () { return view('demo.smart_school.kepsek.dashboard'); });
+    Route::get('/kepsek/smart-mapping', function () { return view('demo.smart_school.kepsek.smart_mapping'); });
+    Route::get('/kepsek/supervisi-jurnal', function () { return view('demo.smart_school.kepsek.supervisi_jurnal'); });
+    Route::get('/kepsek/export', function () { return view('demo.smart_school.kepsek.export'); });
+    // Admin
+    Route::get('/admin', function () { return view('demo.smart_school.admin.users'); });
+    Route::get('/admin/konfigurasi', function () { return view('demo.smart_school.admin.konfigurasi'); });
+    Route::get('/admin/log', function () { return view('demo.smart_school.admin.log'); });
+});
+
 Route::get('/', function () {
     return view('landing');
 });
